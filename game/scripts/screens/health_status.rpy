@@ -611,7 +611,6 @@ screen relationship_details(player_obj, person):
             $ trust = rel_data.get("trust", 0)
             $ friendship = rel_data.get("friendship", 0)
             $ hostility = rel_data.get("hostility", 0)
-            $ bond_strength = (trust + friendship) / 2
 
             text "Description:" size 24 color "#FFFFFF"
             text player_obj.get_relationship_description(person) size 20 color "#CCCCCC" xalign 0.5
@@ -622,10 +621,6 @@ screen relationship_details(player_obj, person):
             bar value friendship range 100 xmaximum 400 ymaximum 20
             text "Hostility:" size 20 color "#FFFFFF"
             bar value hostility range 100 xmaximum 400 ymaximum 20 bar_invert True  # Inverted to show high as "worse"
-            text "Bond Strength:" size 20 color "#FFFFFF"
-            bar value bond_strength range 100 xmaximum 400 ymaximum 20
-
-            # Optional: Add more details here, e.g., recent events or notes if available in your class
             null height 20
             textbutton "Close" action Hide("relationship_details") xalign 0.5 style "inventory_button"
 screen heal_menu(player_obj):

@@ -28,7 +28,7 @@ screen game_screen():
     if not movement_enabled:
         # Mouse-based facing direction when movement is disabled
         $ mx, my = renpy.get_mouse_pos()
-        $ dx = mx - benx - 70
+        $ dx = mx - benx - 73
         $ dy = my - beny - 70
 
         $ sprite = "images/char/Benjerman/walk/smolbenmiddle.png"

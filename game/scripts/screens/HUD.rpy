@@ -185,7 +185,7 @@ screen HUD():
         yalign 0.87
         idle "images/inventory/inventory_hud/meidc_hud.png"
         hover "images/inventory/inventory_hud/medic_hover.png"
-        action Show("status_screen",player_obj=player) #status_screen 
+        action Show("status_screen",player_obj=player) 
         padding (10, 10, 10, 10)
 
     # Head Log Icon - Bottom center

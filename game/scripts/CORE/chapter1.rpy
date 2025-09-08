@@ -17,7 +17,8 @@ default game_state = {
     "chapter_1": {
         "projector_room": {
             "picked_tissue_up": False,
-            "viewed_tutorial": False
+            "viewed_tutorial": False,
+            "viewed_medkit": True
         }
     }
 }
