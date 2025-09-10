@@ -16,6 +16,8 @@ default jump_velocity = 0
 default gravity = 2
 default jump_strength = -15
 default movement_enabled = False
+init python:
+    import math
 screen checkKey():
     if movement_enabled:
         key "K_d" action If(not auto_moving, SetVariable("moving_right", True))
@@ -36,7 +38,6 @@ screen game_screen():
         if abs(dx) <= 5 and abs(dy) <= 5:
             $ sprite = "images/char/Benjerman/walk/smolbenmiddle.png"
         else:
-            $ import math
             $ angle = math.degrees(math.atan2(dy, dx))  
 
             if -22.5 <= angle < 22.5:

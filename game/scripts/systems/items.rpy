@@ -58,10 +58,10 @@ init python:
             "repairable": False
         },
         "Radio": {
-            "type": "tool", 
+            "type": "radio", 
             "weight": 2, 
             "description": "A military grade radio...",
-            "max_durability": 150,  
+            "max_durability": 550,  
             "repairable": True
         },
         "Classified Mission Sheet": {

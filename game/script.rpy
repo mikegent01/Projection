@@ -122,8 +122,8 @@ label start:
         if not game_state["chapter_1"]["projector_room"]["viewed_tutorial"]:
             show light_turning_on_effect           
             "I take a deep breath in and let out some air..."
-            "My body feels lighter, I should get my bearings.."            
-           # show screen vatican_newspaper
+            "My body feels lighter, I should get my bearings.."         
+            show screen vatican_newspaper
             $ game_state["chapter_1"]["projector_room"]["viewed_tutorial"] = True
         window hide 
         $ renpy.pause(hard=True)

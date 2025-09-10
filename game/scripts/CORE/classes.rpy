@@ -397,6 +397,8 @@ init python:
                     elif item_name == "First aid kit":
                         self.remove_item(item_name)
                         renpy.show_screen("heal_menu")
+                    elif item_name == "Radio":
+                        renpy.show_screen("radio_ui")
                     elif item_name == "Tissue":
                         self.remove_item(item_name)
                         self.add_item("Wet Tissue")

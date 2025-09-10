@@ -659,6 +659,7 @@ screen condition_details(player_obj, part):
             linear 0.5 alpha 1.0
 
         vbox:
+            xfill True
             spacing 20
             text f"{part.replace('_', ' ').title()} Status" size 40 xalign 0.5 color "#FFFFFF" bold True
 
