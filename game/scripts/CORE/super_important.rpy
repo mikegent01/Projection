@@ -1,3 +1,4 @@
+default nenvershowrolls = True
 init python:
     import random
     import time

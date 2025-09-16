@@ -1,60 +1,89 @@
-default nenvershowrolls = False
+init python:
+    # Helper: check if object is inside a circle around player
+    def in_range(px, py, ox, oy, radius=200):
+        return ((px - ox)**2 + (py - oy)**2) ** 0.5 <= radius
+
+
 screen dynamic_text_screen():
     if last_label == "intreactivesection01" or test_room == 0:
-        $ projectorx = 650
-        $ seatx = 274
-        $ podiumx = 1005
-        $ rajmanx = 441
-        if abs(benx - 80) <= projectorx :
+        # Object positions (x, y)
+        $ projectorx, projectory = 650, 300
+        $ seatx, seaty = 274, 526
+        $ podiumx, podiumy = 1005, 505
+        $ rajmanx, rajmany = 441, 508
+        $ bagmanx, bagmany = 78, 516
+        $ wirex, wirey   = 932, 487
+        $ drix, driy = 1149,478
+        $ dryx,dryy = 1141,450
+        # Projector
+        if in_range(benx, beny, projectorx, projectory, radius=200):
             imagebutton:
                 idle "images/inventory/inventory_hud/magna.png"
                 hover "images/inventory/inventory_hud/magna_hover.png"
                 focus_mask True
-                xpos projectorx ypos 300 
-                action [Hide("dynamic_text_screen"), Show("projector_look_s2")]      
-        if abs(benx - 80) <= 78 :
+                xpos projectorx ypos projectory
+                action [Hide("dynamic_text_screen"), Show("projector_look_s2")]
+
+        # Seat
+        if in_range(benx, beny, seatx, seaty, radius=200):
             imagebutton:
                 idle "images/inventory/inventory_hud/magna.png"
                 hover "images/inventory/inventory_hud/magna_hover.png"
                 focus_mask True
-                xpos 78 ypos 516
-                action [Hide("dynamic_text_screen"), Show("bagman_look_s1")]                
-        if abs(benx - 80) <= 1132 :
-            imagebutton:
-                idle "images/inventory/inventory_hud/magna.png"
-                hover "images/inventory/inventory_hud/magna_hover.png"
-                focus_mask True
-                xpos 1132 ypos 429
-                action [Hide("dynamic_text_screen"), Show("projector_look_s1")]                  
-        if abs(benx - 80) <= podiumx :
-            imagebutton:
-                idle "images/inventory/inventory_hud/magna.png"
-                hover "images/inventory/inventory_hud/magna_hover.png"
-                focus_mask True
-                xpos podiumx ypos 505 
-                action [Hide("dynamic_text_screen"), Show("podium_look_s1")]
-        if abs(benx - 80) <= seatx :
-            imagebutton:
-                idle "images/inventory/inventory_hud/magna.png"
-                hover "images/inventory/inventory_hud/magna_hover.png"
-                focus_mask True
-                xpos seatx ypos 526 
+                xpos seatx ypos seaty
                 action [Hide("dynamic_text_screen"), Show("seat_look_s1")]
 
-        if abs(benx - 80) <= 932:
+        # Podium
+        if in_range(benx, beny, podiumx, podiumy, radius=200):
             imagebutton:
                 idle "images/inventory/inventory_hud/magna.png"
                 hover "images/inventory/inventory_hud/magna_hover.png"
                 focus_mask True
-                xpos 932 ypos 487
-                action [Hide("dynamic_text_screen"), Show("wire_look_s1")]                
-        if abs(benx - 80) <= rajmanx :
+                xpos podiumx ypos podiumy
+                action [Hide("dynamic_text_screen"), Show("podium_look_s1")]
+
+        # Rajman
+        if in_range(benx, beny, rajmanx, rajmany, radius=200):
             imagebutton:
                 idle "images/inventory/inventory_hud/magna.png"
                 hover "images/inventory/inventory_hud/magna_hover.png"
                 focus_mask True
-                xpos rajmanx ypos 508
-                action [Hide("dynamic_text_screen"), Show("rajman_look_intreactivesection01")]                
+                xpos rajmanx ypos rajmany
+                action [Hide("dynamic_text_screen"), Show("rajman_look_intreactivesection01")]
+
+        # Bagman
+        if in_range(benx, beny, bagmanx, bagmany, radius=200):
+            imagebutton:
+                idle "images/inventory/inventory_hud/magna.png"
+                hover "images/inventory/inventory_hud/magna_hover.png"
+                focus_mask True
+                xpos bagmanx ypos bagmany
+                action [Hide("dynamic_text_screen"), Show("bagman_look_s1")]
+
+        # Wire
+        if in_range(benx, beny, wirex, wirey, radius=200):
+            imagebutton:
+                idle "images/inventory/inventory_hud/magna.png"
+                hover "images/inventory/inventory_hud/magna_hover.png"
+                focus_mask True
+                xpos wirex ypos wirey
+                action [Hide("dynamic_text_screen"), Show("wire_look_s1")]
+        # behindwall
+        if in_range(benx, beny, dryx, dryy, radius=200):
+            imagebutton:
+                idle "images/inventory/inventory_hud/magna.png"
+                hover "images/inventory/inventory_hud/magna_hover.png"
+                focus_mask True
+                xpos dryx ypos dryy
+                action [Hide("dynamic_text_screen"), Show("walllooks1")]
+    if not game_state["chapter_1"]["projector_room"]["driwalkedaway"]:
+        if in_range(benx, beny, dryx, dryy, radius=200):
+            imagebutton:
+                idle "images/inventory/inventory_hud/magna.png"
+                hover "images/inventory/inventory_hud/magna_hover.png"
+                focus_mask True
+                xpos dryx ypos dryy
+                action [Hide("dynamic_text_screen"), Show("projector_look_s1")]
 
     else:
         frame:
@@ -62,6 +91,7 @@ screen dynamic_text_screen():
             vbox:
                 text "I look around."
                 textbutton "Close" action Hide("checkKey")
+
 
 screen projector_look_s2():
     frame:
@@ -150,7 +180,7 @@ screen bagman_look_s1():
 
         vbox:
             spacing 10
-            text "There is a man with a bag on his head.... I will call him bagman from now on"
+            text "There is a man with a bag on his head.... I will call him bagman from now on."
             textbutton "Return" action [Hide("bagman_look_s1"), Show("checkKey")]
 
 screen wire_look_s1():
@@ -161,5 +191,15 @@ screen wire_look_s1():
 
         vbox:
             spacing 10
-            text "The wire is unplugged, it connects the projector screen to the wall"
+            text "The wire is unplugged, it connects the projector screen to the wall. I would plug it back in but I feel like that would be a bad idea."
             textbutton "Return" action [Hide("wire_look_s1"), Show("checkKey")]
+screen walllooks1():
+    frame:
+        xalign 0.5
+        yalign 0.5
+        padding (20, 20)
+
+        vbox:
+            spacing 10
+            text "There is a misscolored part of the brick wall, it has been like this since orientation."
+            textbutton "Return" action [Hide("walllooks1"), Show("checkKey")]

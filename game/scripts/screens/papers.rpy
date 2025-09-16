@@ -82,7 +82,7 @@ style scp_viewport_inner_frame:
     background None  # Transparent background
     xpadding 20 ypadding 20
 
-# Screen definition
+# 001 definition
 screen scp_memo():
     frame:
         style "scp_document_frame"
@@ -201,6 +201,9 @@ transform tab_float:
     subpixel True
     rotate -2
     yoffset -14
+########################################################################################
+########################################################################################
+########################################################################################
 
 
 # ---------------- Styles ----------------
@@ -321,7 +324,7 @@ init -1:
         bold True
 
 
-# ---------------- Screen ----------------
+# ---------------- 002 ----------------
 screen network_notice(
     date="4/18/XX",
     notice_id="OSNW-CHG-8831-B",
@@ -479,7 +482,7 @@ style page_footer:
     color "#777"
     xalign 0.5
 
-# The newspaper screen with scrollbar (remade from scratch with same body text)
+# 003
 screen vatican_newspaper():
     window:
         background "#fdfaf600"  # Off-white background
@@ -581,3 +584,94 @@ screen vatican_newspaper():
 
     # Optional: Close button and key
     textbutton "Close" action Hide("vatican_newspaper") align (0.98, 0.02)
+########################################################################################
+########################################################################################
+########################################################################################
+screen cuz_document():
+    modal True
+    zorder 100
+
+    add Solid("#00000088")
+
+    $ paper_w = int(min(config.screen_width - 48, config.screen_width * 0.92))
+    $ paper_h = int(min(config.screen_height - 48, config.screen_height * 0.88))
+    $ pad_x = 34
+    $ pad_y = 28
+    $ inner_h = max(200, paper_h - (pad_y * 2))
+
+    fixed:
+        xalign 0.5
+        yalign 0.5
+        xminimum paper_w
+        yminimum paper_h
+        xmaximum paper_w
+        ymaximum paper_h
+
+        # Soft shadow
+        add Solid("#000000") at paper_shadow
+
+        # Paper frame
+        frame style "paper_card" at paper_appear:
+            xsize paper_w
+            ysize paper_h
+
+            hbox:
+                spacing 8
+                xfill True
+                yfill True
+
+                viewport id "cuz_vp":
+                    xfill True
+                    ysize inner_h
+                    mousewheel True
+                    draggable True
+
+                    vbox:
+                        spacing 12
+                        xfill True
+
+                        text "Know your Hazard - Sheet 001 - C.U.Z – DOD – SITE 12" style "paper_title"
+                        add Frame(Solid("#e3e7ed"), 0, 0, tile=False, xsize=1, ysize=1)
+
+                        text "Object: Contaminated Unbalanced Zones" style "paper_body"
+                        text "Class: Hazardous" style "paper_body"
+
+                        null height 10
+
+                        text "Description: Colloquially known as unstable zones are places were grounded land is unable to reach hydrostatic equilibrium causing any matter that comes into contact with it to undergo a state of momentary super position until the matter collapses in on itself until it ends up in another position. This new position has yet to be located and has formally been dubbed the backrooms. A series of tests for this demonstration were ran for educational purposes here are there results." style "paper_body"
+
+                        null height 10
+                        text "Test Results" style "paper_meta"
+                        image "images/news/table01.png" 
+
+
+                        null height 15
+
+                        text "Avoidance: All known unstable zones have been marked with caution tape and are located in secure areas, however it is best to adhere to the following guidelines if another one is found:" style "paper_body"
+
+                        text "• Do not come into contact anywhere near the zone in a 5x5x5 area" style "paper_body"
+                        text "• Do inform your nearest research associate" style "paper_body"
+                        text "• Do not attempt to secure the area" style "paper_body"
+                        text "• Do prevent anyone from entering the area" style "paper_body"
+
+                        null height 10
+                        text "Normal View                | Blue light Source:" style "paper_meta"
+                        hbox:
+                            spacing 20
+                            image "images/news/normal.png" xzoom 0.4 yzoom 0.4
+                            image "images/news/underhyperscope.jpg" xzoom 0.4 yzoom 0.4
+
+                        null height 10
+                        text "Conclusion: The Contaminated Unbalanced Zones have evolved from there initial finding leading to them being a staple in dimensional research, many excavations teams and researchers use these as entryways into the world beyond" style "paper_body"
+
+                        null height 20
+                        textbutton "Close" style "paper_btn_primary" action Hide("cuz_document") xalign 0.5
+
+                vbar value YScrollValue("cuz_vp") style "paper_vbar"
+
+        frame style "paper_tab" at tab_float:
+            xalign 1.0
+            yalign 0.0
+            xoffset -10
+            yoffset -10
+            text "004" style "paper_tab_text"

@@ -2,9 +2,9 @@
 errors listed below, and try again.
 
 
-File "game/scripts/screens/radio.rpy", line 146: 'color' is not a keyword argument or valid child of the hbox statement.
-    color "#FFFFFF"
-         ^
+File "game/scripts/screens/talk.rpy", line 31: reached end of line when expecting ':'.
+    if not game_state["chapter_1"]["projector_room"]["driwalkedaway"]
+                                                                     ^
 
 Ren'Py Version: Ren'Py 8.4.0.25071206
-Tue Sep  9 19:55:02 2025
+Tue Sep 16 18:16:07 2025

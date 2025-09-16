@@ -5,7 +5,7 @@ screen status_screen(player_obj):
     modal True
     frame:
         xsize 800
-        ysize 800
+        ysize 600
         xalign 0.5
         yalign 0.5
         background "#0A0A0A"
@@ -23,42 +23,36 @@ screen status_screen(player_obj):
                     xsize (630 - 593) ysize (452 - 407)
                     background Frame(Solid("#ff02023c"), 1, 1)  # semi-transparent black outline
                     action Show("condition_details", player_obj=player_obj, part="left_leg")
-                    tooltip "Click to view Left Leg details"
 
                 button:  
                     xpos 430 ypos 370
                     xsize (630 - 593) ysize (452 - 407)
                     background Frame(Solid("#ff02023c"), 1, 1)
                     action Show("condition_details", player_obj=player_obj, part="right_leg")
-                    tooltip "Click to view Right Leg details"
 
                 button:  
                     xpos 357 ypos 228
                     xsize (710 - 607) ysize (395 - 278)
                     background Frame(Solid("#ff02023c"), 1, 1)
                     action Show("condition_details", player_obj=player_obj, part="body")
-                    tooltip "Click to view Body details"
 
                 button:  
                     xpos 330 ypos 255
                     xsize (601 - 574) ysize (383 - 300)
                     background Frame(Solid("#ff02023c"), 1, 1)
                     action Show("condition_details", player_obj=player_obj, part="left_arm")
-                    tooltip "Click to view Right Arm details"
 
                 button:  
                     xpos 453 ypos 240
                     xsize (723 - 693) ysize (365 - 276)
                     background Frame(Solid("#ff02023c"), 1, 1)
                     action Show("condition_details", player_obj=player_obj, part="right_arm")
-                    tooltip "Click to view Left Arm details"
 
                 button:  
                     xpos 339 ypos 140
                     xsize (736 - 609) ysize (270 - 182)
                     background Frame(Solid("#ff02023c"), 1, 1)
                     action Show("condition_details", player_obj=player_obj, part="head")
-                    tooltip "Click to view Head details"
 
             if player_obj.is_stat_higher("mental_resilience", 50):
                 text "Sanity Level" size 30 xalign 0.5 color "#FFFFFF" bold True
@@ -71,18 +65,20 @@ screen status_screen(player_obj):
             $ has_thermometer = "thermometer" in player_obj.inventory.items  
 
             frame:
+                background None
                 vbox:
                     spacing 10
-                    text "Averages" size 30 xalign 0.5 color "#FFFFFF" bold True
-                    if can_view_health_small:
-                        text f"Est. Avg Health: {average_health}%" size 24 color "#FFFFFF"
-                        bar value average_health range 100 xmaximum 400 ymaximum 20 style "health_bar" bar_invert (average_health < 50)
-                    if can_view_health:
-                        text f"Avg Cleanliness: {average_cleanliness}%" size 24 color "#FFFFFF"
-                        bar value average_cleanliness range 100 xmaximum 400 ymaximum 20 style "clean_bar"
-                    if has_thermometer or can_view_health:
-                        text f"Avg Temperature: {average_temperature}°F" size 24 color "#FFFFFF"
-                        bar value average_temperature range 100 xmaximum 400 ymaximum 20 style "temp_bar"
+                    if can_view_health_small or can_view_health or has_thermometer:
+                        text "Averages" size 30 xalign 0.5 color "#FFFFFF" bold True 
+                        if can_view_health_small:
+                            text f"Est. Avg Health: {average_health}%" size 24 color "#FFFFFF"
+                            bar value average_health range 100 xmaximum 400 ymaximum 20 style "health_bar" bar_invert (average_health < 50)
+                        if can_view_health:
+                            text f"Avg Cleanliness: {average_cleanliness}%" size 24 color "#FFFFFF"
+                            bar value average_cleanliness range 100 xmaximum 400 ymaximum 20 style "clean_bar"
+                        if has_thermometer or can_view_health:
+                            text f"Avg Temperature: {average_temperature}°F" size 24 color "#FFFFFF"
+                            bar value average_temperature range 100 xmaximum 400 ymaximum 20 style "temp_bar"
 
             hbox:
                 xalign 0.5
@@ -691,7 +687,7 @@ screen condition_details(player_obj, part):
                 if part_health < (50 - pain_tolerance_bonus):
                     text "It Hurts!" size 24 xalign 0.5 color "#FF0000"
                 else:
-                    text "It feels alright." size 24 xalign 0.5 color "#AAAAAA"
+                    text "It feels fine." size 24 xalign 0.5 color "#AAAAAA"
 
             if can_view_health_small or (player_obj.emotions.get("Composure", {}).get("value", 0) > 50):
                 text "Conditions:" size 30 xalign 0.5 color "#FFFFFF" bold True

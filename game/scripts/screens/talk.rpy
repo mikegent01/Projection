@@ -1,30 +1,38 @@
 screen speakpeople():
 
     if last_label == "intreactivesection01" or test_room == 0:
-        imagebutton:
-            idle "images/inventory/inventory_hud/speechbubble.png"
-            hover "images/inventory/inventory_hud/speechbubble_hover.png"
-            focus_mask True
-            xpos 350 ypos 350 # Placeholder: Adjust to front seat person's position
-            action [Hide("speak_to_people"), Jump("FrontSeat")]
-            tooltip "Talk to person in front"
+        # NPC positions (reuse the same spots as your look system)
+        $ rajmanx, rajmany = 341, 376   # "Front" person
+        $ bagmanx, bagmany = 8, 376    # "Back" person
+        # If you want the Drill Sergeant to be talkable too, you can use:
+        $ drix, driy = 1027,376
 
-        # Talk to the person in the back seat
-        imagebutton:
-            idle "images/inventory/inventory_hud/speechbubble.png"
-            hover "images/inventory/inventory_hud/speechbubble_hover.png"
-            focus_mask True
-            xpos 10 ypos 350 # Placeholder: Adjust to back seat person's position
-            action [Hide("speak_to_people"), Jump("BackSeat")]
-            tooltip "Talk to person in back"
- 
 
-    else:
-        # Fallback for other labels or if no specific UI is defined for "talk"
-        frame:
-            xalign 0.5 yalign 0.5 padding (20, 20)
-            vbox:
-                spacing 10
-                text "Who do you want to talk to?"
-                # Add generic talk options or just a close button if not appli ble
-                textbutton "Close" action Hide("speak_to_people")
+        # Talk to the person in the front (Rajman)
+        if in_range(benx, beny, rajmanx, rajmany, radius=250):
+            imagebutton:
+                idle "images/inventory/inventory_hud/speechbubble.png"
+                hover "images/inventory/inventory_hud/speechbubble_hover.png"
+                focus_mask True
+                xpos rajmanx ypos rajmany
+                action [Hide("speakpeople"), Jump("FrontSeat")]
+                tooltip "Talk to person in front"
+
+        # Talk to the person in the back (Bagman)
+        if in_range(benx, beny, bagmanx, bagmany, radius=200):
+            imagebutton:
+                idle "images/inventory/inventory_hud/speechbubble.png"
+                hover "images/inventory/inventory_hud/speechbubble_hover.png"
+                focus_mask True
+                xpos bagmanx ypos bagmany
+                action [Hide("speakpeople"), Jump("BackSeat")]
+                tooltip "Talk to person in back"
+
+    if not game_state["chapter_1"]["projector_room"]["driwalkedaway"]:
+            if in_range(benx, beny, drix, driy, radius=200):
+                imagebutton:
+                    idle "images/inventory/inventory_hud/speechbubble.png"
+                    hover "images/inventory/inventory_hud/speechbubble_hover.png"
+                    focus_mask True
+                    xpos drix ypos driy
+                    action [Hide("speakpeople"), Jump("DrillSergeantTalk")]

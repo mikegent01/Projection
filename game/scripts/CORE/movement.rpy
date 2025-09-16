@@ -27,47 +27,54 @@ screen checkKey():
         key "K_SPACE" action If(not auto_moving and beny >= minbeny, [SetVariable("jumping", True), SetVariable("jump_velocity", jump_strength)])   
 screen game_screen():
 
-    if not movement_enabled:
-        # Mouse-based facing direction when movement is disabled
-        $ mx, my = renpy.get_mouse_pos()
-        $ dx = mx - benx - 73
-        $ dy = my - beny - 70
+    # Mouse position
+    $ mx, my = renpy.get_mouse_pos()
+    $ dx = mx - benx - 73
+    $ dy = my - beny - 70
+    $ angle = math.degrees(math.atan2(dy, dx))  
 
-        $ sprite = "images/char/Benjerman/walk/smolbenmiddle.png"
+    # Base folder
+    $ base_path = "images/char/Benjerman/movement/walking"
 
-        if abs(dx) <= 5 and abs(dy) <= 5:
-            $ sprite = "images/char/Benjerman/walk/smolbenmiddle.png"
-        else:
-            $ angle = math.degrees(math.atan2(dy, dx))  
-
-            if -22.5 <= angle < 22.5:
-                $ sprite = "images/char/Benjerman/walk/smallbenright.png"
-            elif 22.5 <= angle < 67.5:
-                $ sprite = "images/char/Benjerman/walk/smallbenbottomright.png"
-            elif 67.5 <= angle < 112.5:
-                $ sprite = "images/char/Benjerman/walk/smallbenbottom.png"
-            elif 112.5 <= angle < 157.5:
-                $ sprite = "images/char/Benjerman/walk/smallbenbottomleft.png"
-            elif angle >= 157.5 or angle < -157.5:
-                $ sprite = "images/char/Benjerman/walk/smallbenleft.png"
-            elif -157.5 <= angle < -112.5:
-                $ sprite = "images/char/Benjerman/walk/smolbenupperleft.png"
-            elif -112.5 <= angle < -67.5:
-                $ sprite = "images/char/Benjerman/walk/smallbenup.png"
-            elif -67.5 <= angle < -22.5:
-                $ sprite = "images/char/Benjerman/walk/smolbenupperright.png"
-
-        image sprite:
-            xpos benx
-            ypos beny
-
+    # Pick direction name based on mouse angle
+    if -22.5 <= angle < 22.5:
+        $ dir_name = "right"
+    elif 22.5 <= angle < 67.5:
+        $ dir_name = "bottomright"
+    elif 67.5 <= angle < 112.5:
+        $ dir_name = "bottom"
+    elif 112.5 <= angle < 157.5:
+        $ dir_name = "bottomleft"
+    elif angle >= 157.5 or angle < -157.5:
+        $ dir_name = "left"
+    elif -157.5 <= angle < -67.5:
+        $ dir_name = "upperleft"
+    elif -67.5 <= angle < -22.5:
+        $ dir_name = "upperright"
     else:
-        image "smolbenwalk":
-            xpos benx
-            ypos beny
-            xzoom ( -1.0 if facing_left else 1.0 )
+        $ dir_name = "right"  # fallback
+
+    # Decide which sprite to use
+    if moving_left or moving_right:
+        # Walking animation → filenames like right1.png, bottomleft2.png etc
+        $ sprite = f"{base_path}/{dir_name}{(walk_frame % 3) + 1}.png"
+    else:
+        # Idle/blinking only works for center-up (blink) and center-bottom (blink)
+        if walk_frame % 60 < 20:
+            $ sprite = f"{base_path}/blink.png"
+        elif walk_frame % 60 < 40:
+            $ sprite = f"{base_path}/blink2.png"
+        else:
+            $ sprite = f"{base_path}/blink3.png"
+
+    # Show sprite (resized)
+    image sprite:
+        xpos benx
+        ypos beny - 43
+        zoom 4
 
     timer 0.05 repeat True action Function(update_game)
+
 init python:
     def update_game():
            global benx, beny, walk_frame, jumping, jump_velocity, facing_left, auto_moving

@@ -113,29 +113,50 @@ label start:
     DRI "good you are dismissed."
 
     "As I turn around I notice two people sitting in there seats, prehaps I should talk to one of them and ask them for help."
+    show screen checkKey  
+    show screen game_screen 
+    show screen HUD
 
-    label intreactivesection01:
+label intreactivesection01:
+    if not game_state["chapter_1"]["projector_room"]["viewed_tutorial"]:
         scene empty_stage_animation with None
-        show screen checkKey  
-        show screen game_screen 
-        show screen HUD
-        if not game_state["chapter_1"]["projector_room"]["viewed_tutorial"]:
-            show light_turning_on_effect           
-            "I take a deep breath in and let out some air..."
-            "My body feels lighter, I should get my bearings.."         
-            show screen vatican_newspaper
-            $ game_state["chapter_1"]["projector_room"]["viewed_tutorial"] = True
-        window hide 
-        $ renpy.pause(hard=True)
+        show light_turning_on_effect
+        "I realize my contacts are not in ..."
+        "My body feels lighter, I should get my bearings.."
+        $ movement_enabled = True
+        $ game_state["chapter_1"]["projector_room"]["viewed_tutorial"] = True
+        window hide
+        $ renpy.pause(45.0, hard=True)
+
+
+    if not game_state["chapter_1"]["projector_room"]["driwalkedaway"] and movement_enabled:
+        scene walkaway1 at fit_screen
+        $ renpy.pause(0.85, hard=True)
+        $ game_state["chapter_1"]["projector_room"]["driwalkedaway"] = True
+        jump intreactivesection01
+    else:
+        scene expression "images/bg/Starting_Room/9/walkaway9.png" at fit_screen
+        $ renpy.pause()  
+label DrillSergeantTalk:
+    $ movement_enabled = False
+    DRI "What is it maggot"
+    BEN "I was wondering if you could go over what I need to do one more time."
+    DRI "I have a important meeting to get to and I will NOT be late"
+    DRI "So write this down somehwere, you FIRST need to repair your projector."
+    DRI "Than you need to get yourself in proper uniform!"
+    BEN "Oh i-."
+    DRI "You better have got all of that maggot! I need to go."
+    $ game_state["chapter_1"]["projector_room"]["driwalkedaway"] = True
+    $ movement_enabled = True
+    scene walkaway1
+    jump intreactivesection01
 label FrontSeat:
     hide screen HUD
     hide screen tutorial_screen
     hide screen checkKey    
     window show     
     scene bootcampinsideprojectorroomstartm # Or appropriate scene
-    show ben neutral at left
     "Although I much rather do this myself I have no other options, I walk up towards the front seat the man is small in stature the only defining trait about him I can notice is his turban."
-    show sultan_talking_pose at right
     SUL "..."
     "Regrettably walking up to him he doesn’t notice me I decide to observe what has taken so much of his attention."
     "As I peer closer at him to find out what he is fiddling with I realize he is trying to light a cigar, he is unable to get the match to light."

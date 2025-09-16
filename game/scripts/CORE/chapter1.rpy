@@ -18,7 +18,7 @@ default game_state = {
         "projector_room": {
             "picked_tissue_up": False,
             "viewed_tutorial": False,
-            "viewed_medkit": True
+            "driwalkedaway": False
         }
     }
 }

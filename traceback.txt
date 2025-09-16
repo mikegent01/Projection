@@ -1,84 +1,35 @@
 ﻿I'm sorry, but an uncaught exception occurred.
 
-While processing the padding property of anonymous style:
-  File "game/script.rpy", line 130, in script
-    $ renpy.pause(hard=True)
-  File "game/script.rpy", line 130, in <module>
-    $ renpy.pause(hard=True)
-      ~~~~~~~~~~~^^^^^^^^^^^
-  File "renpy/style.pyx", line 541, in renpy.style.StyleCore._visit_window
-  File "renpy/style.pyx", line 528, in renpy.style.StyleCore._get_unoffset
-  File "renpy/style.pyx", line 493, in renpy.style.StyleCore._get
-  File "renpy/style.pyx", line 717, in renpy.style.build_style
-  File "renpy/style.pyx", line 714, in renpy.style.build_style
-  File "tmp/gen3-static/style_functions.pyx", line 1599, in style_functions.padding_property
-  File "src/style_common.pxi", line 30, in style_functions.index_0
-TypeError: 'int' object is not subscriptable
+While running game code:
+  File "game/script.rpy", line 131, in script
+    if not game_state["chapter_1"]["projector_room"]["driwalkedaway"] and movement_enabled = True:
+  File "game/script.rpy", line 131
+    not game_state["chapter_1"]["projector_room"]["driwalkedaway"] and movement_enabled = True
+                                                                                        ^^^^^^
+SyntaxError: invalid syntax
 
 -- Full Traceback ------------------------------------------------------------
 
 Traceback (most recent call last):
-  File "game/script.rpy", line 130, in script
-    $ renpy.pause(hard=True)
-  File "renpy/ast.py", line 1187, in execute
-    renpy.python.py_exec_bytecode(self.code.bytecode, self.hide, store=self.store)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "renpy/python.py", line 1260, in py_exec_bytecode
-    exec(bytecode, globals, locals)
-    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "game/script.rpy", line 130, in <module>
-    $ renpy.pause(hard=True)
-      ~~~~~~~~~~~^^^^^^^^^^^
-  File "renpy/exports/statementexports.py", line 198, in pause
-    rv = renpy.ui.interact(mouse="pause", type="pause", roll_forward=roll_forward, pause=delay, pause_modal=modal)
-         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "renpy/ui.py", line 304, in interact
-    rv = renpy.game.interface.interact(roll_forward=roll_forward, **kwargs)
-         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "renpy/display/core.py", line 2216, in interact
-    repeat, rv = self.interact_core(
-                 ~~~~~~~~~~~~~~~~~~^
-        preloads=preloads,
-        ^^^^^^^^^^^^^^^^^^
-    ...<4 lines>...
-        **kwargs,
-        ^^^^^^^^^
-    )  # type: ignore
-    ^                
-  File "renpy/display/core.py", line 2754, in interact_core
-    root_widget.visit_all(lambda d: d.per_interact())
-    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "renpy/display/displayable.py", line 432, in visit_all
-    d.visit_all(callback, seen)
-    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
-  File "renpy/display/displayable.py", line 432, in visit_all
-    d.visit_all(callback, seen)
-    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
-  File "renpy/display/displayable.py", line 432, in visit_all
-    d.visit_all(callback, seen)
-    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
-  File "renpy/display/screen.py", line 508, in visit_all
-    self.child.visit_all(callback, seen=None)
-    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
-  File "renpy/display/displayable.py", line 432, in visit_all
-    d.visit_all(callback, seen)
-    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
-  File "renpy/display/displayable.py", line 423, in visit_all
-    for d in self.visit():
-             ~~~~~~~~~~^^ 
-  File "renpy/display/layout.py", line 1360, in visit
-    self.style._visit_window(rv.append)
-    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
-  File "renpy/style.pyx", line 541, in renpy.style.StyleCore._visit_window
-  File "renpy/style.pyx", line 528, in renpy.style.StyleCore._get_unoffset
-  File "renpy/style.pyx", line 493, in renpy.style.StyleCore._get
-  File "renpy/style.pyx", line 717, in renpy.style.build_style
-  File "renpy/style.pyx", line 714, in renpy.style.build_style
-  File "tmp/gen3-static/style_functions.pyx", line 1599, in style_functions.padding_property
-  File "src/style_common.pxi", line 30, in style_functions.index_0
-TypeError: 'int' object is not subscriptable
+  File "game/script.rpy", line 131, in script
+    if not game_state["chapter_1"]["projector_room"]["driwalkedaway"] and movement_enabled = True:
+  File "renpy/ast.py", line 2079, in execute
+    if renpy.python.py_eval(condition):
+       ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^ 
+  File "renpy/python.py", line 1290, in py_eval
+    code = py_compile(code, "eval")
+           ~~~~~~~~~~^^^^^^^^^^^^^^
+  File "renpy/python.py", line 1247, in py_compile
+    raise e
+  File "renpy/python.py", line 1177, in py_compile
+    tree = compile(source, filename, py_mode, ast.PyCF_ONLY_AST | flags, True)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "game/script.rpy", line 131
+    not game_state["chapter_1"]["projector_room"]["driwalkedaway"] and movement_enabled = True
+                                                                                        ^^^^^^
+SyntaxError: invalid syntax
 
 Windows-11-10.0.26100-SP0 AMD64
 Ren'Py 8.4.0.25071206
 Reflection 1.0
-Tue Sep  9 20:05:41 2025
+Tue Sep 16 18:19:09 2025
