@@ -22,8 +22,11 @@ label start:
         "objectives": ["Talk to the quartermaster at front desk", "Check the supply room", "Go to the military shop"], 
         "progress": 0,
     })    
-    scene ani1_background with None
+    scene stage1 with None
     show screen stagecurtians
+    show screen samuel
+    show screen game_screen
+    $ movement_enabled = False
     BEN "I can only feel excitement, as I finally go to sit down."
     scene satgescene9 with None
     BEN "We are going on a real mission, no more training, no more drills. I finally can put my skills to good use."
@@ -114,7 +117,6 @@ label start:
 
     "As I turn around I notice two people sitting in there seats, prehaps I should talk to one of them and ask them for help."
     show screen checkKey  
-    show screen game_screen 
     show screen HUD
 
 label intreactivesection01:

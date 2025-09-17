@@ -16,6 +16,7 @@ default jump_velocity = 0
 default gravity = 2
 default jump_strength = -15
 default movement_enabled = False
+
 init python:
     import math
 screen checkKey():
@@ -25,6 +26,10 @@ screen checkKey():
         key "keyup_K_a" action If(not auto_moving, [SetVariable("moving_left", False), SetVariable("walk_frame", 4)])
         key "K_a" action If(not auto_moving, SetVariable("moving_left", True))        
         key "K_SPACE" action If(not auto_moving and beny >= minbeny, [SetVariable("jumping", True), SetVariable("jump_velocity", jump_strength)])   
+screen samuel():
+    if not game_state["chapter_1"]["projector_room"]["viewed_tutorial"]:
+        add ("images/char/Samuel/samsit2.png") xpos 552 ypos 473 xanchor 0.0 yanchor 0.0 zoom 4
+
 screen game_screen():
 
     # Mouse position

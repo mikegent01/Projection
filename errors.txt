@@ -2,9 +2,9 @@
 errors listed below, and try again.
 
 
-File "game/scripts/screens/talk.rpy", line 31: reached end of line when expecting ':'.
-    if not game_state["chapter_1"]["projector_room"]["driwalkedaway"]
-                                                                     ^
+File "game/script.rpy", line 27: end of line expected.
+    add "images/char/Samuel/samsit2.png" xpos 592 ypos 513 xanchor 0.0 yanchor 0.0
+                                         ^
 
 Ren'Py Version: Ren'Py 8.4.0.25071206
-Tue Sep 16 18:16:07 2025
+Tue Sep 16 20:18:07 2025

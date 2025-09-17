@@ -205,6 +205,9 @@ image stage1unplug_animation:
         "images/bg/Starting_Room/8/stage1unplug10.png", 99999.0
     )
     xysize (config.screen_width, config.screen_height)
+image stage1:
+    "images/bg/Starting_Room/stage1.png", 
+    xysize (config.screen_width, config.screen_height)        
 image walkaway1:
     Animation(
         "images/bg/Starting_Room/9/walkaway1.png", 0.1,
