@@ -205,9 +205,6 @@ image stage1unplug_animation:
         "images/bg/Starting_Room/8/stage1unplug10.png", 99999.0
     )
     xysize (config.screen_width, config.screen_height)
-image stage1:
-    "images/bg/Starting_Room/stage1.png", 
-    xysize (config.screen_width, config.screen_height)        
 image walkaway1:
     Animation(
         "images/bg/Starting_Room/9/walkaway1.png", 0.1,
@@ -221,5 +218,20 @@ image walkaway1:
         "images/bg/Starting_Room/9/walkaway9.png", 99999.0
     )
     xysize (config.screen_width, config.screen_height)    
+################### 200 Lines will be removed at the end of this
 transform fit_screen:
     xysize (config.screen_width, config.screen_height)    
+
+transform flip_horizontal:
+    xzoom -1.0
+screen rajman():
+        add ("images/char/Drill Sarg/drill2.png") xpos 1086 ypos 400 xanchor 0.0 yanchor 0.0 zoom 4 at flip_horizontal
+
+screen samuel():
+    if not game_state["chapter_1"]["projector_room"]["viewed_tutorial"]:
+        add ("images/char/Samuel/samsit2.png") xpos 552 ypos 473 xanchor 0.0 yanchor 0.0 zoom 4
+screen drill_sargent():
+        add ("images/char/Drill Sarg/drill2.png") xpos 1086 ypos 400 xanchor 0.0 yanchor 0.0 zoom 4 at flip_horizontal
+image stage1:
+    "images/bg/Starting_Room/stage1.png", 
+    xysize (config.screen_width, config.screen_height)        

@@ -2,9 +2,9 @@
 errors listed below, and try again.
 
 
-File "game/script.rpy", line 27: end of line expected.
-    add "images/char/Samuel/samsit2.png" xpos 592 ypos 513 xanchor 0.0 yanchor 0.0
-                                         ^
+File "game/scripts/image/backgrounds.rpy", line 234: ATL statement contains two expressions in a row; is one of them a misspelled property? If not, separate them with pass.
+    at fit_screen
+                         ^
 
 Ren'Py Version: Ren'Py 8.4.0.25071206
-Tue Sep 16 20:18:07 2025
+Wed Sep 17 21:21:06 2025

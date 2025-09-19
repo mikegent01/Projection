@@ -25,6 +25,7 @@ label start:
     scene stage1 with None
     show screen stagecurtians
     show screen samuel
+    show screen drill_sargent
     show screen game_screen
     $ movement_enabled = False
     BEN "I can only feel excitement, as I finally go to sit down."
