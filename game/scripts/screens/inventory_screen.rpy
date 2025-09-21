@@ -121,8 +121,8 @@ screen inventory(player_obj=None):
                 hbox:
                     xalign 0.5
                     spacing 15
-                    textbutton "Crafting" action Show("crafting_screen", player_obj=player_obj) style "inventory_button"
-                    textbutton "Liquids" action Show("combine_liquids_screen", player_obj=player_obj) style "inventory_button"
+                    #textbutton "Crafting" action Show("crafting_screen", player_obj=player_obj) style "inventory_button"
+                    #textbutton "Liquids" action Show("combine_liquids_screen", player_obj=player_obj) style "inventory_button"
                     textbutton "Close" action [SetVariable("selected_item", None), Hide("inventory")] style "inventory_button"
 screen crafting_screen(player_obj):
     modal True

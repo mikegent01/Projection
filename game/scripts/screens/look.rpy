@@ -85,12 +85,6 @@ screen dynamic_text_screen():
                 xpos dryx ypos dryy
                 action [Hide("dynamic_text_screen"), Show("projector_look_s1")]
 
-    else:
-        frame:
-            xalign 0.5 yalign 0.5 padding (20, 20)
-            vbox:
-                text "I look around."
-                textbutton "Close" action Hide("checkKey")
 
 
 screen projector_look_s2():

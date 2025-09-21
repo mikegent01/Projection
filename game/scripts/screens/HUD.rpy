@@ -318,7 +318,7 @@ screen journal_screen():
 
                 textbutton "Missions" action SetScreenVariable("current_tab", "Missions")
                 textbutton "Books" action SetScreenVariable("current_tab", "Books")
-                textbutton "Journal" action SetScreenVariable("current_tab", "Journal")
+                #textbutton "Journal" action SetScreenVariable("current_tab", "Journal")
                 textbutton "Tapes" action SetScreenVariable("current_tab", "Tapes") # <--- ADDED Tapes button
                 textbutton "Close" action [Stop("voice"), Hide("journal_screen")] # Stop tape audio on close
 
