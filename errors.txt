@@ -2,9 +2,9 @@
 errors listed below, and try again.
 
 
-File "game/scripts/image/backgrounds.rpy", line 234: ATL statement contains two expressions in a row; is one of them a misspelled property? If not, separate them with pass.
-    at fit_screen
-                         ^
+File "game/scripts/screens/card.rpy", line 4: expected 'comma or end of line' not found.
+    descriptions = {
+                 ^
 
 Ren'Py Version: Ren'Py 8.4.0.25071206
-Wed Sep 17 21:21:06 2025
+Mon Sep 22 18:05:01 2025
