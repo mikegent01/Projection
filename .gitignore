@@ -13,7 +13,7 @@ coverage.xml
 **/.vscode/
 **/.DS_Store
 **/Thumbs.db
-
+/unity
 /*.html
 /*.zip
 /*.exe
