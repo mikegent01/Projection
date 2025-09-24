@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class animation_card : MonoBehaviour
@@ -6,6 +7,14 @@ public class animation_card : MonoBehaviour
     [SerializeField] private string cardliftoff = "Card_Outtro";
     public bool introended = false;
     public InputHandler inputhan;
+    public playsound ps;
+
+    public void soundevent()
+    {
+        ps.soundmanager("intro");        
+    }
+
+
     public void introend()
     {
         introended = true;

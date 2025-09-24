@@ -6,6 +6,7 @@ public class InputHandler : MonoBehaviour
     #region Variables
 
     private Camera _mainCamera;
+    public playsound ps;
 
     // animation_cards this will be found in 
     public bool animation_card_liftoff = false;
@@ -29,7 +30,9 @@ public class InputHandler : MonoBehaviour
             if (animCard.introended == true)
             {
                 animation_card_liftoff = true;
+                ps.soundmanager("click");        
                 animCard.playliftoff();
+                ps.soundmanager("get");        
                 Debug.Log("Playing Liftoff");
             }
             else
