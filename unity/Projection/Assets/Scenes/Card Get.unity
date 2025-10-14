@@ -137,7 +137,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &373808834
 RectTransform:
   m_ObjectHideFlags: 0
@@ -754,6 +754,7 @@ GameObject:
   - component: {fileID: 807069419}
   - component: {fileID: 807069420}
   - component: {fileID: 807069421}
+  - component: {fileID: 807069422}
   m_Layer: 0
   m_Name: BG1
   m_TagString: Untagged
@@ -823,7 +824,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -1
-  m_Sprite: {fileID: 8287873616420496286, guid: cb32288bc1d34c54e99848507a656d07, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -831,7 +832,7 @@ SpriteRenderer:
   m_Size: {x: 1.2, y: 0.8}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!95 &807069421
@@ -856,6 +857,20 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &807069422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 807069418}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e6d23e0a86ac4f40af725474f90967c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  backgrounds:
+  - {fileID: 8287873616420496286, guid: cb32288bc1d34c54e99848507a656d07, type: 3}
 --- !u!1 &889737198
 GameObject:
   m_ObjectHideFlags: 0
@@ -1317,6 +1332,54 @@ MonoBehaviour:
   liftoff: {fileID: 8300000, guid: 4b2e70888f085cd4d96f666a0f18d3c6, type: 3}
   click: {fileID: 8300000, guid: 5c1a90de58aa50843ba9115f49aae308, type: 3}
   get: {fileID: 8300000, guid: b014914aa9a8c2548ad1c4b3bfa49ae4, type: 3}
+--- !u!1 &1847790047
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1847790049}
+  - component: {fileID: 1847790048}
+  m_Layer: 0
+  m_Name: Game Master
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1847790048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1847790047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f9fd7032e6dd8d48b0d4e77c7945078, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  cardget: 1
+  anicard: {fileID: 1857226154}
+  bg: {fileID: 807069422}
+  rain: {fileID: 373808837}
+--- !u!4 &1847790049
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1847790047}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.99561, y: 1.04257, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1857226149
 GameObject:
   m_ObjectHideFlags: 0
@@ -1337,7 +1400,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &1857226150
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1405,7 +1468,7 @@ Transform:
   m_GameObject: {fileID: 1857226149}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.09, y: -6.84, z: 0}
+  m_LocalPosition: {x: 0.14, y: -6.88, z: 0}
   m_LocalScale: {x: 5.3323803, y: 5.3323803, z: 5.3323803}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1419,7 +1482,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1857226149}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 2cca7ad04d0aac2449d59b13ecc8b3db, type: 2}
   m_CullingMode: 0
@@ -1659,3 +1722,4 @@ SceneRoots:
   - {fileID: 889737201}
   - {fileID: 2038119967}
   - {fileID: 1499904069}
+  - {fileID: 1847790049}

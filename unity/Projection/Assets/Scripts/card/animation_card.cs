@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class animation_card : MonoBehaviour
@@ -14,7 +15,11 @@ public class animation_card : MonoBehaviour
         ps.soundmanager("intro");        
     }
 
-
+    public void startcardget()
+    {
+        cardani.gameObject.SetActive(true);
+        cardani.gameObject.GetComponent<Animator>().enabled = true;           
+    }
     public void introend()
     {
         introended = true;
