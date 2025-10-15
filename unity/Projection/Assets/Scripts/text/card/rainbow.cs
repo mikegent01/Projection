@@ -5,12 +5,12 @@ using UnityEngine;
 public class RainbowText_V1 : MonoBehaviour
 {
     [SerializeField] private Gradient textGradient;
-    [SerializeField] private float gradientSpeed = .1f;
+    [SerializeField] private float gradientSpeed = .5f;
     
     
     private TMP_Text m_TextComponent;
     private float _totalTime;
-
+    public TextMeshProUGUI title;
     void Awake()
     {
         m_TextComponent = GetComponent<TMP_Text>();
@@ -22,7 +22,14 @@ public class RainbowText_V1 : MonoBehaviour
         gameObject.SetActive(true);
         StartCoroutine(AnimateVertexColors());
     }
-
+    public void changetext(string text)
+    {
+        gameObject.SetActive(true);
+        title.text = text;
+        if (text == "Projection") { //probably will be only a few cases for this so i wont worry bout it
+        title.color = Color.green;
+        }
+    }
 
 
     IEnumerator AnimateVertexColors()
