@@ -24,7 +24,7 @@ public class Game_Master : MonoBehaviour
         chapternum = 0;
         mm.Enablemenu();
         hb.gameObject.SetActive(false);
-        bg.Changebg(0);
+        bg.Changebg(1);
         rain.Changetext("Projection");
         ps.Soundmanager(1); // the_last_horn
     }
