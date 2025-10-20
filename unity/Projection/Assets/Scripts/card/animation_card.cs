@@ -6,26 +6,23 @@ public class animation_card : MonoBehaviour
 {
     [SerializeField] private Animator cardani;
     [SerializeField] private string cardliftoff = "Card_Outtro";
-    public bool introended = false;
+    public bool Introended = false;
     public InputHandler inputhan;
     public playsound ps;
 
-    public void soundevent()
-    {
-        ps.soundmanager("intro");        
-    }
 
-    public void startcardget()
+
+    public void Startcardget()
     {
         cardani.gameObject.SetActive(true);
         cardani.gameObject.GetComponent<Animator>().enabled = true;           
     }
-    public void introend()
+    public void Introend()
     {
-        introended = true;
+        Introended = true;
         Debug.Log("Animation Finished You May Click");
     }
-    public void playliftoff()
+    public void Playliftoff()
     {
         if (inputhan.animation_card_liftoff == true)
         {

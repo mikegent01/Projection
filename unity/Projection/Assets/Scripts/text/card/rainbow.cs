@@ -7,7 +7,6 @@ public class RainbowText_V1 : MonoBehaviour
     [SerializeField] private Gradient textGradient;
     [SerializeField] private float gradientSpeed = .5f;
     
-    
     private TMP_Text m_TextComponent;
     private float _totalTime;
     public TextMeshProUGUI title;
@@ -22,12 +21,17 @@ public class RainbowText_V1 : MonoBehaviour
         gameObject.SetActive(true);
         StartCoroutine(AnimateVertexColors());
     }
-    public void changetext(string text)
+    public void Changetext(string text)
     {
         gameObject.SetActive(true);
         title.text = text;
-        if (text == "Projection") { //probably will be only a few cases for this so i wont worry bout it
-        title.color = Color.green;
+        if (text == "Projection")
+        { //probably will be only a few cases for this so i wont worry bout it
+            title.color = Color.green;
+        }
+        if (text == "Chapter 0")
+        {
+            title.color = Color.darkGreen;
         }
     }
 
