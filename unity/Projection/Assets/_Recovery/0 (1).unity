@@ -212,24 +212,34 @@ MonoBehaviour:
   text: {fileID: 1194190106}
   lines:
   - lineofd: 
+    name: 
     eventname: 
   - lineofd: 
+    name: 
     eventname: 
   - lineofd: 
+    name: 
     eventname: 
   - lineofd: 
+    name: 
     eventname: 
   - lineofd: 
+    name: 
     eventname: 
   - lineofd: 
+    name: 
     eventname: 
   - lineofd: 
+    name: 
     eventname: 
   - lineofd: 
+    name: 
     eventname: 
   - lineofd: 
+    name: 
     eventname: 
   textspeed: 0.1
+  DLname: {fileID: 632684706}
   enabledl: 0
 --- !u!1 &131418194
 GameObject:
@@ -1181,10 +1191,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.07812501
+    x: 0
     y: 0
-    width: 0.84375006
-    height: 1
+    width: 0
+    height: 0
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 34
@@ -1339,8 +1349,9 @@ GameObject:
   - component: {fileID: 632684703}
   - component: {fileID: 632684705}
   - component: {fileID: 632684704}
+  - component: {fileID: 632684706}
   m_Layer: 5
-  m_Name: Name
+  m_Name: Named
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1464,6 +1475,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 632684702}
   m_CullTransparentMesh: 1
+--- !u!114 &632684706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 632684702}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a82de851b2924044a352b4a47f11da7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  text: {fileID: 632684704}
 --- !u!1 &782182573
 GameObject:
   m_ObjectHideFlags: 0

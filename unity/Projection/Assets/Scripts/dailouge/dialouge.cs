@@ -6,6 +6,7 @@ using UnityEditor;
 public class Dialougesystem
 {
     public string lineofd;
+    public string name;
     public string eventname;
 }
 
@@ -14,19 +15,27 @@ public class dialouge : MonoBehaviour
     public TextMeshProUGUI text;
     public Dialougesystem[] lines;
     public float textspeed;
+    public DLname dl; 
     public bool enabledl;
-    private int index;
+    public int index;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start() // WALL OF TEXT 
     {
         gameObject.SetActive(false);
         //chapter select lines
+        int x = 0;
+        while (x != 5)
+        {
+            lines[x].name = "Chapter Select";
+            x++;
+        }
         lines[0].lineofd = "My heart feels heavy and my head feels light.";
         lines[1].lineofd = "My bones ache in pain but my will has not withered.";
         lines[2].lineofd = "The past will not dictate my future.";
         lines[3].lineofd = "As I climb this endless tower the truth unveils itself.";
         lines[4].lineofd = "When the giant wakes...";
+
     }
     public void Dlsetup()
     {
@@ -38,6 +47,7 @@ public class dialouge : MonoBehaviour
     {
         if (text.text == lines[index].lineofd)
         {
+            dl.Changetext(lines[index].name);
             NextLine();
         }
         else
@@ -68,6 +78,7 @@ public class dialouge : MonoBehaviour
     }
     public void Setline(int line)
     {
+        dl.Changetext(lines[index].name);
         StopAllCoroutines();
         text.text = string.Empty;
         index = line; //index actual line number

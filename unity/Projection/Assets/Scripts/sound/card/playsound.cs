@@ -3,6 +3,7 @@ using JetBrains.Annotations;
  using System.Collections.Generic; 
 using UnityEngine;
 using System.Linq;
+using System.Collections;
 public class playsound : MonoBehaviour
 {
     public List<AudioClip> musiclist = new List<AudioClip>();
@@ -10,8 +11,9 @@ public class playsound : MonoBehaviour
     public int[] songsthatloop = new int[5]; // update this when adding looping songs
 
     public animation_card anicar;
+    public Volumecontrol vc;
+    public Musicvolcontrol mvc;
     [Header("Audio")]
-
     [SerializeField] AudioSource soundSource;
     [Header ("Music")]
     public AudioClip the_last_horn;
@@ -50,4 +52,15 @@ public class playsound : MonoBehaviour
 
         }
     }
+    public void Fadeoutvool()
+    {
+        StartCoroutine(vc.Fadeoutvol());
+        StartCoroutine(mvc.Fadeoutvol2());
+    }
+    public void Fadeinvoolume()
+    {
+        StartCoroutine(vc.Fadeinvol());
+        StartCoroutine(mvc.Fadeinvol2());
+    }
+ 
 }

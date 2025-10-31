@@ -16,7 +16,7 @@ public class RainbowText_V1 : MonoBehaviour
     }
 
 
-    public void begincolor()
+    public void Begincolor()
     {
         gameObject.SetActive(true);
         StartCoroutine(AnimateVertexColors());

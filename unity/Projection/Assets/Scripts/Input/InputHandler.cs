@@ -1,3 +1,4 @@
+using UnityEditor.Rendering.Universal;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,6 +8,10 @@ public class InputHandler : MonoBehaviour
 
     private Camera _mainCamera;
     public dialouge dl;
+    public S_Camera cm;
+    public Transitionmanager tm;
+    public Fadesystem fs;
+
     public Game_Master gm;
     public playsound ps;
 
@@ -45,7 +50,12 @@ public class InputHandler : MonoBehaviour
                 ps.Soundmanager(2); // click
                 animCard.Playliftoff();
                 ps.Soundmanager(3); // get
+                tm.Fade();
                 Debug.Log("Playing Liftoff");
+                cm.Zooomin(); // Zoom in image
+                ps.Fadeoutvool(); // fade out volume
+                fs.gameObject.SetActive(true);
+                fs.Lightfade();
             }
             else
             {

@@ -1,12 +1,17 @@
 using UnityEngine;
-
+using System.Collections;
+using System.IO;
+using UnityEngine.SceneManagement;
+using JetBrains.Annotations;
 public class Game_Master : MonoBehaviour
 {
     public bool cardget = true;
     public animation_card anicard;
-    public background bg;
+    public Background bg;
     public dialouge dl;
     public playsound ps;
+    public Transitionmanager tm;
+    public S_Camera cm;
     public leftb lb;
     public buttonright rb;
     public hidebuttons hb;
@@ -14,6 +19,7 @@ public class Game_Master : MonoBehaviour
     public RainbowText_V1 rain;
     public Mainmenu mm;
     public int chapternum;
+    //      INITAL GAME START MAIN MENU AND OTHER STUFF      //
     void Start()
     {
         Startgamemenu();
@@ -36,13 +42,13 @@ public class Game_Master : MonoBehaviour
             lb.gameObject.SetActive(true);
             rain.Changetext("Chapter" + " " + chapternum);
             Chapterbgchanger();
-        if (chapternum == 4)
-        {
-            rb.gameObject.SetActive(false);
-        }
+            if (chapternum == 4)
+            {
+                rb.gameObject.SetActive(false);
+            }
         }
 
-     
+
     }
     private void Chapterbgchanger()
     {
@@ -56,7 +62,7 @@ public class Game_Master : MonoBehaviour
         {
             bg.Changebg(1);
             dl.Setline(1);
-        } 
+        }
         if (chapternum == 2)
         {
             bg.Changebg(2);
@@ -71,39 +77,70 @@ public class Game_Master : MonoBehaviour
         {
             bg.Changebg(2);
             dl.Setline(4);
-        }                                 
+        }
     }
     public void Leftnextchapter()
     {
-        Chapterbgchanger(); 
+        Chapterbgchanger();
         if (chapternum > 0)
         {
             chapternum--;
             rb.gameObject.SetActive(true);
             rain.Changetext("Chapter" + " " + chapternum);
             Chapterbgchanger();
-        if (chapternum == 0)
-        {
-            lb.gameObject.SetActive(false);
-        }                      
+            if (chapternum == 0)
+            {
+                lb.gameObject.SetActive(false);
+            }
         }
-    }    
+    }
     public void Startchapterselect()
     {
         rain.Changetext("Chapter" + " " + chapternum);
         hb.gameObject.SetActive(true);
-        rb.gameObject.SetActive(true);         
-        hb.gameObject.SetActive(true);       
+        rb.gameObject.SetActive(true);
+        hb.gameObject.SetActive(true);
         Gaincard();
         dl.enabledl = true;
         dl.gameObject.SetActive(true);
         dl.Dlsetup();
     }
-    void Gaincard(){ // no idea when this will be used 
+    void Gaincard() // card goes up from bottom of screen
+    {
         anicard.Startcardget();
-        rain.begincolor();
-        ps.Soundmanager(0);         
+        rain.Begincolor();
+        ps.Soundmanager(0);
         bg.Changebg(0);
     }
 
+    public void Savegame()
+    {
+        using (StreamWriter sw = new StreamWriter(Application.dataPath + "/save.dat", false))
+        {
+            //You want to edit the file yourself go ahead! this is a csv file first is bg 2nd is line number
+            sw.WriteLine(bg.svbg + "," + dl.index);
+        }
+    }
+    int Numbg;
+    int Numline;
+    public void Loadgame()
+    {
+        StreamReader strReader = new StreamReader(Application.dataPath + "/save.dat");
+        bool eof = false;
+        while (!eof)
+        {
+            string data_string = strReader.ReadLine();
+            if (data_string == null)
+            {
+                eof = true;
+                break;
+            }
+            var datavalues = data_string.Split(',');
+            Numbg = int.Parse(datavalues[0]);
+            Numline = int.Parse(datavalues[1]);
+            bg.Changebg(Numbg);
+            dl.Setline(Numline);
+        }
+        
+    }
 }
