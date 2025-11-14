@@ -3,18 +3,29 @@ using System.Collections;
 using System.IO;
 using UnityEngine.SceneManagement;
 using JetBrains.Annotations;
+using Unity.Collections;
+using UnityEditor.Tilemaps;
+using System;
+using UnityEngine.Rendering.Universal;
 public class Game_Master : MonoBehaviour
 {
     public bool cardget = true;
     public animation_card anicard;
     public Background bg;
+    public Animator lcanimtor;
     public dialouge dl;
+    public left_char lc;
     public playsound ps;
+    public string Eventnamer;
+    public Fadesystem fs;
     public Transitionmanager tm;
     public S_Camera cm;
+    public bool gameactive = false;
     public leftb lb;
+    public S_Camera scam;
     public buttonright rb;
     public hidebuttons hb;
+    private PixelPerfectCamera ppc;
 
     public RainbowText_V1 rain;
     public Mainmenu mm;
@@ -27,6 +38,7 @@ public class Game_Master : MonoBehaviour
     void Startgamemenu()
     {
         // this starts the game call this first always :D
+        dl.gameObject.SetActive(true);
         chapternum = 0;
         mm.Enablemenu();
         hb.gameObject.SetActive(false);
@@ -36,7 +48,7 @@ public class Game_Master : MonoBehaviour
     }
     public void Rightnextchapter()
     {
-        if (chapternum < 5)
+        if (chapternum < 5 && gameactive == false)
         {
             chapternum++;
             lb.gameObject.SetActive(true);
@@ -46,6 +58,15 @@ public class Game_Master : MonoBehaviour
             {
                 rb.gameObject.SetActive(false);
             }
+        }
+        else
+        {
+            try { bg.svbg += 1; }
+            catch (Exception)
+            {
+                print("You failed to change BG");
+            }
+            dl.Setline(bg.svbg);
         }
 
 
@@ -82,7 +103,7 @@ public class Game_Master : MonoBehaviour
     public void Leftnextchapter()
     {
         Chapterbgchanger();
-        if (chapternum > 0)
+        if (chapternum > 0 && gameactive == false)
         {
             chapternum--;
             rb.gameObject.SetActive(true);
@@ -93,6 +114,11 @@ public class Game_Master : MonoBehaviour
                 lb.gameObject.SetActive(false);
             }
         }
+        else
+        {
+            bg.svbg -= 1;
+            dl.Setline(bg.svbg);
+        }        
     }
     public void Startchapterselect()
     {
@@ -112,6 +138,7 @@ public class Game_Master : MonoBehaviour
         ps.Soundmanager(0);
         bg.Changebg(0);
     }
+    // save and load systems//
 
     public void Savegame()
     {
@@ -141,6 +168,33 @@ public class Game_Master : MonoBehaviour
             bg.Changebg(Numbg);
             dl.Setline(Numline);
         }
-        
+
     }
+    /// CH01 START FUN
+    public void Chp0()
+    {
+        ppc = scam.GetComponent<PixelPerfectCamera>();
+        ppc.assetsPPU = 101;
+        ps.Fadeoutvool();
+        fs.gameObject.SetActive(false);
+        mm.gameObject.SetActive(false);
+        rain.gameObject.SetActive(false);
+        tm.Fadein();
+        dl.gameObject.SetActive(true);
+        dl.Setline(5);
+        dl.enabledl = true;
+        bg.Changebg(5); //scene one begin!
+        hb.gameObject.SetActive(false);
+        gameactive = true;
+    }
+    public void Handleevents(string Eventnamer)
+    {
+        if (Eventnamer == "explosiveentrance")
+        {
+            Debug.Log("explosiveentrance");
+            lc.Playanim("explosiveentrance");
+            StopAllCoroutines();
+           }
+    }
+
 }

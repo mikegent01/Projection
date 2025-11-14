@@ -10,7 +10,9 @@ public class DLname : MonoBehaviour
 
     public void Changetext(string textreal)
 {
-    text.text = textreal;
+        text.text = textreal;
+        Debug.Log( "Text input was given!"+ textreal);
+    
 }
 
 }

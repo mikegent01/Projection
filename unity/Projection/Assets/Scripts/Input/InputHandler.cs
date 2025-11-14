@@ -30,8 +30,8 @@ public class InputHandler : MonoBehaviour
         {
             if (dl.enabledl == true)
             {
-                Debug.Log("Going to next line!");
-                dl.Nextline();
+                Debug.Log("Attempting to go to the next line!");
+                dl.NextLinePhaser();
             }
         }        
     }
@@ -41,7 +41,6 @@ public class InputHandler : MonoBehaviour
 
         var rayHit = Physics2D.GetRayIntersection(_mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue()));
         if (!rayHit.collider) return;
-
         if (rayHit.collider.CompareTag("cardclickable"))
         {
             if (animCard.Introended == true && gm.chapternum == 0)
@@ -62,6 +61,7 @@ public class InputHandler : MonoBehaviour
                 Debug.Log("Card Is Still Moving or chapter not in game yet");
             }
         }
+
         else
         {
             Debug.Log(rayHit.collider.gameObject.name);
