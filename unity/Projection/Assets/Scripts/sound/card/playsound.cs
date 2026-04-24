@@ -22,6 +22,7 @@ public class playsound : MonoBehaviour
     [Header ("Var")]
 
     public AudioClip liftoff;
+    public AudioClip dooropen;
     public AudioClip click;
     public AudioClip get;
     // probably should be a directory but its just 4 things lol
@@ -33,17 +34,23 @@ public class playsound : MonoBehaviour
         musiclist.Add(the_last_horn); // 1 music titlescreen
         musiclist.Add(click); // 2 click generic
         musiclist.Add(get); //3 click on card get sound
+        musiclist.Add(dooropen); //4 click on card get sound
     }
-
+    public void Stopallsounds()
+    {
+        musicSource.Stop();
+    }
     public void Soundmanager(int num)
     {
         musicSource.loop = false;
         if (musiclist.Count > num)
         {
+            Debug.Log("Played song #" + num);
             musicSource.PlayOneShot(musiclist[num]);
             if (songsthatloop.Contains(num))
             {
                 musicSource.loop = true;
+                Debug.Log("Looping song #" + num);
             }
         }
         else

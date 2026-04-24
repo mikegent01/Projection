@@ -11,7 +11,7 @@ public class Dialougesystem
     public string name;
     public Color color;
     public string eventname;
-    public string emotion;
+    public int emotion;
 }
 public class dialouge : MonoBehaviour
 {
@@ -21,6 +21,7 @@ public class dialouge : MonoBehaviour
     public historyscript his;
     public Game_Master gm;
     public objhist objhist;
+    public Emotionhandler emohan;
     public float textspeed;
     public DLname dl; 
     public bool enabledl;
@@ -30,7 +31,8 @@ public class dialouge : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start() // WALL OF TEXT 
     {
-        gameObject.SetActive(false);
+        textspeed = 0.01f;
+       // gameObject.SetActive(false);
         //chapter select lines
         int x = 0;
         while (x != 4)
@@ -38,17 +40,34 @@ public class dialouge : MonoBehaviour
             lines[x].name = "Chapter Select";
             x++;
         }
-        lines[0].lineofd = "My heart feels heavy and my head feels light.";
+        while (x != 12)
+        {
+            lines[x].name = "Ben";
+            x++;
+        }        
+      lines[0].lineofd = "The dampness of the hallway I stand in causes.";
         lines[1].lineofd = "My bones ache in pain but my will has not withered.";
         lines[2].lineofd = "The past will not dictate my future.";
         lines[3].lineofd = "As I climb this endless tower the truth unveils itself.";
         lines[4].lineofd = "When the giant wakes...";
         // begin DL CH0
-        lines[5].lineofd = "20XX 10/12";
+        lines[5].lineofd = "The door creeks open as the handle falls off its hinges I quickly pick it up as a rotted wooden piece falls down a splash being heard below me. I look up from the door into the room I used to call home.";
+        lines[6].lineofd = "The smell of moldy mildew hits my nose. My nose scrunches up and I recoil. I recognize the smell, I could never really get used to it. I take one step forward another splash is heard I look down to the source of the noise.";
+        lines[7].lineofd = "The broken door handle in my hand stares back at me. I remembered what this room meant to me how the people here used to be not just friends but family. How all of them slowly failed training or moved away. Now its just me its not my home anymore only strangers remain my hand lossens its grip. A thunk is heard on the ground as the door handle lays there in a puddle of its own sorrow. I begin to walk forward trying to forget the past another splash is heard and.";
         lines[5].eventname = "explosiveentrance";
-        lines[6].lineofd = "Cool";
-        lines[7].name = "Ben";
-        lines[7].lineofd = "Whoops!";
+        lines[8].lineofd = "My feet skid across the wet floor, I catch myself before I fall. Could I have been pranked or did the janitors just not do there job. It could have been both for all I knew.";
+        lines[6].emotion = 1; //embaresed 
+        lines[9].lineofd = "My pants are soaking wet. My face is burning hot, My own self doubt consuming me like the moldy walls of this room. I begin to consider my options.";
+        lines[10].lineofd = "I can run away leave this all behind right now or I can look up and walk straight ahead with a smile. ";
+        lines[11].lineofd = "I freeze up looking around the room, most seats were empty only the best of the best remained. Do I really deserve to be here?";
+        lines[14].lineofd = "I ball my fists up and look up. Everyone else in the room seems to distracted. The faint smell of mildew and the state of th eothers uniforms tells me it will be okay. ";
+        lines[15].lineofd = "I begin to walk forward trying to ignore my soaked pants as they brush against my rough skin. It is a privilege to shower and my lack of confidence left me without it.";
+        lines[16].lineofd = "I begin to hyperfocus on my walking one step forward and than another... I walk past empty seats slowly. methodology making sure to not trip ever again...";
+        lines[9].eventname = "Benleaveleft";
+        //new scene logic here
+        lines[17].lineofd = "";
+        
+        
     }
     public void Populatehistory()
     {
@@ -86,6 +105,24 @@ public class dialouge : MonoBehaviour
     }
     public void NextLinePhaser()
     {
+        Checknextlineemotion();
+        Checknextlineevent();
+    }
+    void Checknextlineemotion()
+    {
+        if (lines[index].emotion < 0)
+        {
+            Debug.Log(index + " Next Line dosen't have an emotion!");
+        }        
+        else
+        {
+            Debug.Log(index + " has an emotion!");
+            StopAllCoroutines();
+            emohan.ChangeSprite(lines[index].emotion);
+        }                       
+    }
+    void Checknextlineevent()
+    {
         if (lines[index].eventname ==null || lines[index].eventname =="")
         {
             Debug.Log(index + " Next Line dosen't have an event!");
@@ -101,8 +138,7 @@ public class dialouge : MonoBehaviour
             StopAllCoroutines();
             gm.Handleevents(lines[index].eventname);
             NextLine();         
-        }        
-        
+        }               
     }
     // Update is called once per frame
 
@@ -171,10 +207,10 @@ public class dialouge : MonoBehaviour
     }
     public void Setline(int line)
     {
+        index = line; //index actual line number
         dl.Changetext(lines[index].name);
         StopAllCoroutines();
         text.text = string.Empty;
-        index = line; //index actual line number
         StartCoroutine(Typeline());
     }        
     public void Previousline()

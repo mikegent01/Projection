@@ -15,6 +15,10 @@ public class left_char : MonoBehaviour
         anime = GetComponent<Animator>();
         anime.Play("Slamin");        
         }
+        if (Eventnamer == "Benleaveleft"){
+        anime = GetComponent<Animator>();
+        anime.Play("Slamout");        
+        }        
     }
     // Update is called once per frame
     void Update()

@@ -7,6 +7,7 @@ using Unity.Collections;
 using UnityEditor.Tilemaps;
 using System;
 using UnityEngine.Rendering.Universal;
+using Unity.VisualScripting;
 public class Game_Master : MonoBehaviour
 {
     public bool cardget = true;
@@ -26,7 +27,6 @@ public class Game_Master : MonoBehaviour
     public buttonright rb;
     public hidebuttons hb;
     private PixelPerfectCamera ppc;
-
     public RainbowText_V1 rain;
     public Mainmenu mm;
     public int chapternum;
@@ -42,7 +42,9 @@ public class Game_Master : MonoBehaviour
         chapternum = 0;
         mm.Enablemenu();
         hb.gameObject.SetActive(false);
-        bg.Changebg(1);
+        dl.gameObject.SetActive(false);
+        bg.Changebg(6);
+        rain.gameObject.SetActive(false);
         rain.Changetext("Projection");
         ps.Soundmanager(1); // the_last_horn
     }
@@ -173,6 +175,7 @@ public class Game_Master : MonoBehaviour
     /// CH01 START FUN
     public void Chp0()
     {
+        dl.gameObject.SetActive(true);
         ppc = scam.GetComponent<PixelPerfectCamera>();
         ppc.assetsPPU = 101;
         ps.Fadeoutvool();
@@ -180,7 +183,8 @@ public class Game_Master : MonoBehaviour
         mm.gameObject.SetActive(false);
         rain.gameObject.SetActive(false);
         tm.Fadein();
-        dl.gameObject.SetActive(true);
+        ps.Stopallsounds();
+        ps.Fadeinvoolume();
         dl.Setline(5);
         dl.enabledl = true;
         bg.Changebg(5); //scene one begin!
@@ -193,8 +197,15 @@ public class Game_Master : MonoBehaviour
         {
             Debug.Log("explosiveentrance");
             lc.Playanim("explosiveentrance");
+            ps.Soundmanager(4);
             StopAllCoroutines();
            }
+        if (Eventnamer == "Benleaveleft")
+        {
+            Debug.Log("Benleaveleft");
+            lc.Playanim("Benleaveleft");
+            StopAllCoroutines();
+           }           
     }
 
 }

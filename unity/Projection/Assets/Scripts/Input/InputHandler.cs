@@ -1,7 +1,10 @@
 using UnityEditor.Rendering.Universal;
 using UnityEngine;
 using UnityEngine.InputSystem;
+    
+using UnityEngine.EventSystems;
 
+  
 public class InputHandler : MonoBehaviour
 {
     #region Variables
@@ -26,21 +29,28 @@ public class InputHandler : MonoBehaviour
     }
     public void Update()
     {
-        if (Mouse.current.leftButton.wasPressedThisFrame)
-        {
-            if (dl.enabledl == true)
-            {
-                Debug.Log("Attempting to go to the next line!");
-                dl.NextLinePhaser();
-            }
-        }        
+ 
     }
     public void OnClick(InputAction.CallbackContext context)
     {
         if (!context.started) return;
-
+       if (EventSystem.current.IsPointerOverGameObject())
+        {
+            Debug.Log("UI GET!");
+            return;
+        }
         var rayHit = Physics2D.GetRayIntersection(_mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue()));
         if (!rayHit.collider) return;
+                if (rayHit.collider.CompareTag("nextdialouge"))
+        {
+            Debug.Log("Is dlenabledl true?");
+            if (dl.enabledl == true)
+            {
+                Debug.Log("Attempting to go to the next line!");
+                dl.NextLinePhaser();
+        }
+        }
+
         if (rayHit.collider.CompareTag("cardclickable"))
         {
             if (animCard.Introended == true && gm.chapternum == 0)

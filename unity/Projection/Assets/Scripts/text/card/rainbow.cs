@@ -54,7 +54,7 @@ public class RainbowText_V1 : MonoBehaviour
             // If No Characters then just yield and wait for some text to be added
             if (characterCount == 0)
             {
-                yield return new WaitForSeconds(0.25f);
+                yield return new WaitForSeconds(0.5f);
                 continue;
             }
 
