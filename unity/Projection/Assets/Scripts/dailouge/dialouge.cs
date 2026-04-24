@@ -51,8 +51,10 @@ public class dialouge : MonoBehaviour
         lines[3].lineofd = "As I climb this endless tower the truth unveils itself.";
         lines[4].lineofd = "When the giant wakes...";
         // begin DL CH0
-        lines[5].lineofd = "The door creeks open as the handle falls off its hinges I quickly pick it up as a rotted wooden piece falls down a splash being heard below me. I look up from the door into the room I used to call home.";
-        lines[6].lineofd = "The smell of moldy mildew hits my nose. My nose scrunches up and I recoil. I recognize the smell, I could never really get used to it. I take one step forward another splash is heard I look down to the source of the noise.";
+        lines[5].lineofd = "The door creeks open as the handle falls off its hinges I quickly pick it up as a rotted wooden piece falls down a splash being heard below me.";
+        lines[6].lineofd = "I look up from the door into the room I used to call home.The smell of moldy mildew hits my nose. My nose scrunches up and I recoil.";
+        
+        lines[6].lineofd = "I recognize the smell, I could never really get used to it. I take one step forward another splash is heard I look down to the source of the noise.";
         lines[7].lineofd = "The broken door handle in my hand stares back at me. I remembered what this room meant to me how the people here used to be not just friends but family. How all of them slowly failed training or moved away. Now its just me its not my home anymore only strangers remain my hand lossens its grip. A thunk is heard on the ground as the door handle lays there in a puddle of its own sorrow. I begin to walk forward trying to forget the past another splash is heard and.";
         lines[5].eventname = "explosiveentrance";
         lines[8].lineofd = "My feet skid across the wet floor, I catch myself before I fall. Could I have been pranked or did the janitors just not do there job. It could have been both for all I knew.";
