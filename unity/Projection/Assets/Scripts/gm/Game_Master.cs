@@ -185,7 +185,8 @@ public class Game_Master : MonoBehaviour
         tm.Fadein();
         ps.Stopallsounds();
         ps.Fadeinvoolume();
-        dl.Setline(5);
+        dl.Setline(4);
+        dl.NextLinePhaser();
         dl.enabledl = true;
         bg.Changebg(5); //scene one begin!
         hb.gameObject.SetActive(false);
