@@ -5,12 +5,13 @@ using System.Collections;
 /// <summary>
 /// Dialogue runner: plays back a loaded DialogueScript.
 ///
-/// Content lives in plain-text files under Assets/Resources/Dialogue
+/// Content lives in plain-text/JSON files under Assets/Resources/Dialogue
 /// (see DialogueScript for the format) — this class only runs it:
 /// typewriter, speaker/nameplate sync (DialogueBoxUI), emotion bridging,
-/// event dispatch, history recording. Public surface kept stable for
-/// Game_Master / InputHandler / buttons: Dlsetup, NextLinePhaser, Setline,
-/// Previousline, Populatehistory, RestoreEmotion, index, enabledl.
+/// event dispatch, history recording, auto-forward, and skip actions.
+/// Public surface kept stable for Game_Master / InputHandler / buttons:
+/// Dlsetup, NextLinePhaser, Setline, Previousline, SkipLine, ToggleAuto,
+/// Populatehistory, RestoreEmotion, index, enabledl.
 /// </summary>
 public class dialouge : MonoBehaviour
 {
@@ -45,6 +46,10 @@ public class dialouge : MonoBehaviour
 
     /// <summary>Number of loaded lines (0 before Start / when no files were found).</summary>
     public int LineCount => lines.Length;
+
+    /// <summary>Auto-forward playback state.</summary>
+    public bool isAuto = false;
+    Coroutine autoRoutine = null;
 
     void Start()
     {
@@ -83,6 +88,65 @@ public class dialouge : MonoBehaviour
         if (index < 0 || index >= lines.Length) return;
         StopAllCoroutines();
         text.text = lines[index].Text;
+    }
+
+    /// <summary>
+    /// Skip action: if the typewriter is still animating, completes the text immediately;
+    /// if the text is already finished typing, advances to the next line.
+    /// </summary>
+    public void SkipLine()
+    {
+        if (index < 0 || index >= lines.Length) return;
+        if (text != null && text.text != lines[index].Text)
+        {
+            StopAllCoroutines();
+            text.text = lines[index].Text;
+        }
+        else
+        {
+            NextLinePhaser();
+        }
+    }
+
+    /// <summary>Toggles auto-forward dialogue playback mode.</summary>
+    public void ToggleAuto()
+    {
+        isAuto = !isAuto;
+        if (isAuto)
+        {
+            if (autoRoutine != null) StopCoroutine(autoRoutine);
+            autoRoutine = StartCoroutine(AutoPlayRoutine());
+        }
+        else
+        {
+            if (autoRoutine != null) StopCoroutine(autoRoutine);
+            autoRoutine = null;
+        }
+    }
+
+    IEnumerator AutoPlayRoutine()
+    {
+        while (isAuto)
+        {
+            if (index >= 0 && index < lines.Length)
+            {
+                // Wait until current line finishes typing
+                while (text != null && text.text != lines[index].Text)
+                {
+                    yield return new WaitForSeconds(0.1f);
+                }
+                // Pause to let player read
+                yield return new WaitForSeconds(1.8f);
+                if (isAuto && enabledl)
+                {
+                    NextLinePhaser();
+                }
+            }
+            else
+            {
+                yield break;
+            }
+        }
     }
 
     void NextLine()

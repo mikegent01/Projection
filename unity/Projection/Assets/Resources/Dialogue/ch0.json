@@ -1,9 +1,9 @@
 {
   "lines": [
     { "id": "", "speaker": "Ben", "emotion": "keep", "eventName": "", "text": "When the giant wakes..." },
-    { "id": "", "speaker": "Ben", "emotion": "neutral", "eventName": "", "text": "Mold. Rot. Decay" },
-    { "id": "", "speaker": "Ben", "emotion": "keep", "eventName": "", "text": "The smell....I could never really get used to it.." },
-    { "id": "", "speaker": "Ben", "emotion": "keep", "eventName": "", "text": "I remember what this room meant to me how the people here used to be not just friends but family." },
+    { "id": "", "speaker": "Ben", "emotion": "neutral", "eventName": "", "text": "The door creeks open as the handle falls off its hinges I quickly pick it up as a rotted wooden piece falls down a splash being heard below me." },
+    { "id": "", "speaker": "Ben", "emotion": "keep", "eventName": "", "text": "I recognize the smell, I could never really get used to it. I take one step forward another splash is heard I look down to the source of the noise." },
+    { "id": "", "speaker": "Ben", "emotion": "keep", "eventName": "", "text": "The broken door handle in my hand stares back at me. I remembered what this room meant to me how the people here used to be not just friends but family." },
     { "id": "", "speaker": "Ben", "emotion": "keep", "eventName": "", "text": "How all of them slowly failed training or moved away. Now its just me its not my home anymore only strangers remain my hand lossens its grip. A thunk is heard on the ground as the door handle lays there in a puddle of its own sorrow. I begin to walk forward trying to forget the past another splash is heard and..." },
     { "id": "", "speaker": "Ben", "emotion": "keep", "eventName": "explosiveentrance", "text": "My feet skid across the wet floor, I catch myself before I fall. Could I have been pranked or did the janitors just not do there job. It could have been both for all I knew." },
     { "id": "", "speaker": "Ben", "emotion": "embarrassed", "eventName": "", "text": "" },
