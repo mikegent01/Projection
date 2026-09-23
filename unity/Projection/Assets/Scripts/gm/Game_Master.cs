@@ -47,30 +47,21 @@ public class Game_Master : MonoBehaviour
         rain.Changetext("Projection");
         ps.Soundmanager(1); // the_last_horn
     }
+    // Highest chapter the select screen can browse (chapters actually have
+    // preview text/backgrounds defined). Only chapter 0 is playable so far,
+    // but its siblings are defined and browsable.
+    const int LastSelectableChapter = 4;
+
     public void Rightnextchapter()
     {
-        if (chapternum < 5 && gameactive == false)
+        if (gameactive) return;
+        if (chapternum < LastSelectableChapter)
         {
             chapternum++;
-            lb.gameObject.SetActive(true);
             rain.Changetext("Chapter" + " " + chapternum);
             Chapterbgchanger();
-            if (chapternum == 4)
-            {
-                rb.gameObject.SetActive(false);
-            }
+            UpdateChapterNav();
         }
-        else
-        {
-            try { bg.svbg += 1; }
-            catch (Exception)
-            {
-                print("You failed to change BG");
-            }
-            dl.Setline(bg.svbg);
-        }
-
-
     }
     private void Chapterbgchanger()
     {
@@ -103,34 +94,34 @@ public class Game_Master : MonoBehaviour
     }
     public void Leftnextchapter()
     {
-        Chapterbgchanger();
-        if (chapternum > 0 && gameactive == false)
+        if (gameactive) return;
+        if (chapternum > 0)
         {
             chapternum--;
-            rb.gameObject.SetActive(true);
             rain.Changetext("Chapter" + " " + chapternum);
             Chapterbgchanger();
-            if (chapternum == 0)
-            {
-                lb.gameObject.SetActive(false);
-            }
+            UpdateChapterNav();
         }
-        else
-        {
-            bg.svbg -= 1;
-            dl.Setline(bg.svbg);
-        }        
     }
+
+    /// <summary>Enable/dim the PREV / NEXT chips at the ends of the chapter list.</summary>
+    void UpdateChapterNav()
+    {
+        if (dl != null && dl.box != null)
+        {
+            dl.box.SetChapterNavState(chapternum > 0, chapternum < LastSelectableChapter);
+        }
+    }
+
     public void Startchapterselect()
     {
         rain.Changetext("Chapter" + " " + chapternum);
-        hb.gameObject.SetActive(true);
-        rb.gameObject.SetActive(true);
-        hb.gameObject.SetActive(true);
         Gaincard();
+        if (dl.his != null) dl.his.ClearLog(); // fresh run -> fresh field log
         dl.enabledl = true;
         dl.gameObject.SetActive(true);
         dl.Dlsetup();
+        UpdateChapterNav();
     }
     void Gaincard() // card goes up from bottom of screen
     {
@@ -198,6 +189,9 @@ public class Game_Master : MonoBehaviour
                 dl.currentEmotion = int.Parse(datavalues[2]);
                 dl.RestoreEmotion();
             }
+
+            // refill the field log so the loaded run shows its full history
+            if (dl.his != null) dl.his.RebuildFromLines(Numline);
 
             Debug.Log("Game loaded: bg " + Numbg + ", line " + Numline);
         }

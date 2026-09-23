@@ -48,6 +48,9 @@ public class DialogueBoxUI : MonoBehaviour
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI bodyText;
 
+    [Header("Game flow (wired for the chapter select nav chips)")]
+    public Game_Master gm;
+
     [Header("Speakers (change nameplate / portrait from these variables)")]
     public CharacterVisual[] characters = new CharacterVisual[0];
 
@@ -64,15 +67,16 @@ public class DialogueBoxUI : MonoBehaviour
     [SerializeField] float nameFontSize = 34f;
     [SerializeField] float bodyFontSize = 32f;
 
-    [Header("Colors (sampled from the reference mock-up)")]
-    [SerializeField] Color32 leftPanelColor = new Color32(0x0B, 0x0C, 0x12, 0xFF);
-    [SerializeField] Color32 textPanelColor = new Color32(0x26, 0x26, 0x2C, 0xFF);
-    [SerializeField] Color32 nameplateColor = new Color32(0x07, 0x08, 0x0C, 0xFF);
-    [SerializeField] Color32 accentColor = new Color32(0x83, 0xC8, 0xDE, 0xFF);
-    [SerializeField] Color32 bodyTextColor = new Color32(0xF0, 0xF0, 0xF0, 0xFF);
-    [SerializeField] Color32 shadeOverlayColor = new Color32(0x12, 0x16, 0x20, 0xFA);
-    [SerializeField] Color32 chipColor = new Color32(0x0C, 0x0D, 0x12, 0xF2);
-    [SerializeField] Color32 chipTextColor = new Color32(0xC9, 0xD1, 0xD9, 0xFF);
+    [Header("Military theme (see MilitaryGUI)")]
+    [SerializeField] Color32 leftPanelColor = new Color32(0x1B, 0x1E, 0x16, 0xFF);   // near-black olive
+    [SerializeField] Color32 textPanelColor = new Color32(0x2A, 0x2D, 0x24, 0xFF);   // olive drab, dark
+    [SerializeField] Color32 nameplateColor = new Color32(0x12, 0x14, 0x0E, 0xFF);   // recessed plate
+    [SerializeField] Color32 accentColor = new Color32(0xE0, 0xB3, 0x51, 0xFF);      // stencil amber
+    [SerializeField] Color32 bodyTextColor = new Color32(0xEA, 0xE8, 0xDA, 0xFF);    // warm off-white
+    [SerializeField] Color32 shadeOverlayColor = new Color32(0x0C, 0x0E, 0x08, 0xFA);
+    [SerializeField] Color32 chipColor = new Color32(0x12, 0x14, 0x0E, 0xF2);
+    [SerializeField] Color32 chipTextColor = new Color32(0xE0, 0xB3, 0x51, 0xFF);    // amber
+    [SerializeField] Color32 chipDisabledColor = new Color32(0x5A, 0x5E, 0x4C, 0xFF);
 
     [Header("Motion")]
     [Tooltip("How fast the emotion background color blends toward its target.")]
@@ -80,8 +84,8 @@ public class DialogueBoxUI : MonoBehaviour
 
     [Header("Chapter Select restyle")]
     [SerializeField] float chapterFontSize = 46f;
-    [SerializeField] Color32 chapterAccentColor = new Color32(0xE0, 0xB3, 0x51, 0xFF); // gold
-    [SerializeField] Color32 chapterTextPanelColor = new Color32(0x1E, 0x20, 0x2B, 0xFF);
+    [SerializeField] Color32 chapterAccentColor = new Color32(0x7C, 0x8A, 0x4F, 0xFF); // olive marking
+    [SerializeField] Color32 chapterTextPanelColor = new Color32(0x1B, 0x1E, 0x16, 0xFF);
 
     public enum BoxMode
     {
@@ -99,6 +103,9 @@ public class DialogueBoxUI : MonoBehaviour
     Image shadeImage;     // dark fade on top of the glow
     RectTransform portraitRT;
     Image portraitImage;
+    RectTransform chapterNav;
+    Button prevChip;
+    Button nextChip;
     CharacterVisual activeCharacter;
     DialogueEmotion activeEmotion = DialogueEmotion.Neutral;
     BoxMode activeMode = BoxMode.Dialogue;
@@ -108,6 +115,7 @@ public class DialogueBoxUI : MonoBehaviour
 
     void Awake()
     {
+        if (gm == null) gm = FindFirstObjectByType<Game_Master>();
         BuildLayout();
         // snap to neutral so the first frame has no color pop
         targetGlow = DialogueEmotionPalette.Glow(DialogueEmotion.Neutral);
@@ -138,7 +146,8 @@ public class DialogueBoxUI : MonoBehaviour
 
         if (nameText != null)
         {
-            nameText.text = activeCharacter != null ? activeCharacter.displayName : (key ?? string.Empty);
+            string display = activeCharacter != null ? activeCharacter.displayName : (key ?? string.Empty);
+            nameText.text = display.ToUpperInvariant(); // stencil-style military plate
             if (activeCharacter != null) nameText.color = activeCharacter.nameColor;
         }
         RefreshPortrait();
@@ -182,6 +191,21 @@ public class DialogueBoxUI : MonoBehaviour
     /// <summary>Current layout mode of the text box.</summary>
     public BoxMode Mode => activeMode;
 
+    /// <summary>Enable/dim the chapter select nav chips (PREV / NEXT).</summary>
+    public void SetChapterNavState(bool canPrev, bool canNext)
+    {
+        SetChipState(prevChip, canPrev);
+        SetChipState(nextChip, canNext);
+    }
+
+    void SetChipState(Button chip, bool enabled)
+    {
+        if (chip == null) return;
+        chip.interactable = enabled;
+        TextMeshProUGUI label = chip.GetComponentInChildren<TextMeshProUGUI>(true);
+        if (label != null) label.color = enabled ? (Color)chipTextColor : (Color)chipDisabledColor;
+    }
+
     void ApplyMode()
     {
         bool chapter = activeMode == BoxMode.ChapterSelect;
@@ -198,13 +222,16 @@ public class DialogueBoxUI : MonoBehaviour
         }
 
         Color32 accent = chapter ? chapterAccentColor : accentColor;
-        if (leftAccentImg != null) leftAccentImg.color = accent;
-        if (rightAccentImg != null) rightAccentImg.color = accent;
+        MilitaryGUI.StyleHazard(leftAccentImg, accent);
+        MilitaryGUI.StyleHazard(rightAccentImg, accent);
+
+        if (chapterNav != null) chapterNav.gameObject.SetActive(chapter);
 
         if (bodyText != null)
         {
             bodyText.fontSize = chapter ? chapterFontSize : bodyFontSize;
             bodyText.alignment = chapter ? TextAlignmentOptions.Center : TextAlignmentOptions.TopLeft;
+            bodyText.characterSpacing = chapter ? 6f : 0f; // stencil-ish spread for announcements
         }
     }
 
@@ -346,6 +373,7 @@ public class DialogueBoxUI : MonoBehaviour
             nameText.alignment = TextAlignmentOptions.Left;
             nameText.fontSize = nameFontSize;
             nameText.fontStyle = FontStyles.Bold;
+            nameText.characterSpacing = 8f; // stencil markings spread
             nameText.raycastTarget = false;
             nameText.margin = Vector4.zero;
         }
@@ -368,6 +396,8 @@ public class DialogueBoxUI : MonoBehaviour
         RestyleLegacyButton("Load", 1);
         RestyleLegacyButton("Save", 2);
 
+        BuildChapterNav();
+
         ApplyMode();
     }
 
@@ -376,9 +406,6 @@ public class DialogueBoxUI : MonoBehaviour
         Transform button = transform.Find(childName);
         if (button == null) return;
 
-        const float chipWidth = 96f;
-        const float chipHeight = 30f;
-        const float chipGap = 10f;
         const float chipRise = 12f;
 
         RectTransform rt = (RectTransform)button;
@@ -395,8 +422,12 @@ public class DialogueBoxUI : MonoBehaviour
         TextMeshProUGUI label = button.GetComponentInChildren<TextMeshProUGUI>(true);
         if (label != null)
         {
+            // History opens the field log now
+            label.text = childName == "History" ? "LOG" : childName.ToUpperInvariant();
             label.color = chipTextColor;
             label.fontSize = 20f;
+            label.fontStyle = FontStyles.Bold;
+            label.characterSpacing = 6f;
             label.alignment = TextAlignmentOptions.Center;
             RectTransform lrt = (RectTransform)label.transform;
             Stretch(lrt, 0f, 0f, 1f, 1f);
@@ -405,6 +436,70 @@ public class DialogueBoxUI : MonoBehaviour
         }
 
         button.SetAsLastSibling(); // keep chips clickable above the panels
+    }
+
+    const float chipWidth = 96f;
+    const float chipHeight = 30f;
+    const float chipGap = 10f;
+    const float navChipWidth = 196f;
+
+    void BuildChapterNav()
+    {
+        chapterNav = MakeRect("Chapter Nav", root);
+        chapterNav.anchorMin = new Vector2(0f, 1f);
+        chapterNav.anchorMax = new Vector2(0f, 1f);
+        chapterNav.pivot = new Vector2(0f, 0f);
+        chapterNav.anchoredPosition = new Vector2(0f, 12f);
+        chapterNav.sizeDelta = new Vector2(navChipWidth * 2f + chipGap, chipHeight);
+
+        prevChip = MakeNavChip(chapterNav, "<< PREV CHAPTER", 0f);
+        nextChip = MakeNavChip(chapterNav, "NEXT CHAPTER >>", navChipWidth + chipGap);
+
+        if (prevChip != null && gm != null)
+            prevChip.onClick.AddListener(() => gm.Leftnextchapter());
+        if (nextChip != null && gm != null)
+            nextChip.onClick.AddListener(() => gm.Rightnextchapter());
+
+        chapterNav.gameObject.SetActive(false); // chapter-select mode only
+        chapterNav.SetAsLastSibling();
+    }
+
+    Button MakeNavChip(RectTransform parent, string label, float x)
+    {
+        RectTransform rt = MakeRect(label, parent);
+        rt.anchorMin = new Vector2(0f, 0f);
+        rt.anchorMax = new Vector2(0f, 0f);
+        rt.pivot = new Vector2(0f, 0f);
+        rt.anchoredPosition = new Vector2(x, 0f);
+        rt.sizeDelta = new Vector2(navChipWidth, chipHeight);
+
+        Image bg = rt.gameObject.AddComponent<Image>();
+        bg.color = chipColor;
+
+        Button button = rt.gameObject.AddComponent<Button>();
+        button.targetGraphic = bg;
+
+        TextMeshProUGUI tmp = MakeLabel(rt, label, 20f, chipTextColor);
+        tmp.fontStyle = FontStyles.Bold;
+        tmp.characterSpacing = 5f;
+        tmp.alignment = TextAlignmentOptions.Center;
+        return button;
+    }
+
+    TextMeshProUGUI MakeLabel(RectTransform parent, string text, float size, Color32 color)
+    {
+        RectTransform rt = MakeRect("Label", parent);
+        Stretch(rt, 0f, 0f, 1f, 1f);
+        var tmp = rt.gameObject.AddComponent<TextMeshProUGUI>();
+        tmp.text = text;
+        tmp.fontSize = size;
+        tmp.color = color;
+        tmp.raycastTarget = false;
+        tmp.margin = Vector4.zero;
+        // inherit the project font from the existing dialogue text objects
+        if (nameText != null && nameText.font != null) tmp.font = nameText.font;
+        else if (bodyText != null && bodyText.font != null) tmp.font = bodyText.font;
+        return tmp;
     }
 
     // ----------------------------------------------------------- helpers
@@ -434,6 +529,7 @@ public class DialogueBoxUI : MonoBehaviour
     Image MakeAccent(RectTransform panel, string name)
     {
         Image accent = MakeImage(name, panel, accentColor);
+        MilitaryGUI.StyleHazard(accent, accentColor); // hazard-stripe accent strip
         RectTransform rt = (RectTransform)accent.transform;
         rt.anchorMin = new Vector2(0f, 1f);
         rt.anchorMax = new Vector2(1f, 1f);

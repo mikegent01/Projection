@@ -31,7 +31,6 @@ public class dialouge : MonoBehaviour
     // The emotion the dialogue is currently sitting in. Persists across
     // lines until a line with an explicit (>= 0) emotion changes it.
     public int currentEmotion = 0;
-    bool Histenabled = false;
 
     /// <summary>
     /// Pushes the current line's speaker + mode into the text box UI so the
@@ -50,6 +49,10 @@ public class dialouge : MonoBehaviour
             && speaker.Trim().Equals("Chapter Select", StringComparison.OrdinalIgnoreCase);
         box.SetChapterSelectMode(chapterSelect);
         box.SetSpeaker(speaker);
+
+        // only real dialogue is logged (chapter select / intro is not)
+        if (!chapterSelect && his != null && !string.IsNullOrEmpty(lines[i].lineofd))
+            his.Record(speaker, lines[i].lineofd, i);
 
         if (lines[i].emotion >= 0)
         {
@@ -119,18 +122,10 @@ public class dialouge : MonoBehaviour
     }
     public void Populatehistory()
     {
-        if (Histenabled == false)
+        // opens/closes the redesigned FIELD LOG overlay
+        if (his != null)
         {
-            Histenabled = true;
-            objhist.gameObject.SetActive(true);
-            his.gameObject.SetActive(true);
-            his.Populate(index);
-        }
-        else
-        {
-            objhist.gameObject.SetActive(false);
-            his.gameObject.SetActive(false);
-            Histenabled = false;
+            his.Toggle();
         }
     }
     public void Dlsetup()
