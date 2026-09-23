@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 127684532}
   - component: {fileID: 127684534}
   - component: {fileID: 127684535}
+  - component: {fileID: 1910000001}
   m_Layer: 5
   m_Name: Dialouge Box
   m_TagString: Settings
@@ -176,7 +177,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.8490566, g: 0.8490566, b: 0.8490566, a: 0.54509807}
+  m_Color: {r: 0.8490566, g: 0.8490566, b: 0.8490566, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -215,112 +216,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::dialouge
   text: {fileID: 1194190106}
   nametext: {fileID: 632684704}
-  lines:
-  - lineofd: 
-    name: 
-    color: {r: 0, g: 0, b: 0, a: 0}
-    eventname: 
-    emotion: 0
-  - lineofd: 
-    name: 
-    color: {r: 0, g: 0, b: 0, a: 0}
-    eventname: 
-    emotion: 0
-  - lineofd: 
-    name: 
-    color: {r: 0, g: 0, b: 0, a: 0}
-    eventname: 
-    emotion: 0
-  - lineofd: 
-    name: 
-    color: {r: 0, g: 0, b: 0, a: 0}
-    eventname: 
-    emotion: 0
-  - lineofd: 
-    name: 
-    color: {r: 0, g: 0, b: 0, a: 0}
-    eventname: 
-    emotion: 0
-  - lineofd: 
-    name: 
-    color: {r: 0, g: 0, b: 0, a: 0}
-    eventname: 
-    emotion: 0
-  - lineofd: 
-    name: 
-    color: {r: 0, g: 0, b: 0, a: 0}
-    eventname: 
-    emotion: 0
-  - lineofd: 
-    name: 
-    color: {r: 0, g: 0, b: 0, a: 0}
-    eventname: 
-    emotion: 0
-  - lineofd: 
-    name: 
-    color: {r: 0, g: 0, b: 0, a: 0}
-    eventname: 
-    emotion: 0
-  - lineofd: 
-    name: 
-    color: {r: 0, g: 0, b: 0, a: 0}
-    eventname: 
-    emotion: 0
-  - lineofd: 
-    name: 
-    color: {r: 0, g: 0, b: 0, a: 0}
-    eventname: 
-    emotion: 0
-  - lineofd: 
-    name: 
-    color: {r: 0, g: 0, b: 0, a: 0}
-    eventname: 
-    emotion: 0
-  - lineofd: 
-    name: 
-    color: {r: 0, g: 0, b: 0, a: 0}
-    eventname: 
-    emotion: 0
-  - lineofd: 
-    name: 
-    color: {r: 0, g: 0, b: 0, a: 0}
-    eventname: 
-    emotion: 0
-  - lineofd: 
-    name: 
-    color: {r: 0, g: 0, b: 0, a: 0}
-    eventname: 
-    emotion: 0
-  - lineofd: 
-    name: 
-    color: {r: 0, g: 0, b: 0, a: 0}
-    eventname: 
-    emotion: 0
-  - lineofd: 
-    name: 
-    color: {r: 0, g: 0, b: 0, a: 0}
-    eventname: 
-    emotion: 0
-  - lineofd: 
-    name: 
-    color: {r: 0, g: 0, b: 0, a: 0}
-    eventname: 
-    emotion: 0
-  - lineofd: 
-    name: 
-    color: {r: 0, g: 0, b: 0, a: 0}
-    eventname: 
-    emotion: 0
-  - lineofd: 
-    name: 
-    color: {r: 0, g: 0, b: 0, a: 0}
-    eventname: 
-    emotion: 0
-  - lineofd: 
-    name: 
-    color: {r: 0, g: 0, b: 0, a: 0}
-    eventname: 
-    emotion: 0
+  scriptFiles:
+  - Dialogue/chapter_select
+  - Dialogue/ch0
   his: {fileID: 1117694421}
   gm: {fileID: 1847790048}
   objhist: {fileID: 1089093791}
@@ -2983,7 +2881,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1089093786
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2995,8 +2893,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1117694416}
+  m_Children: []
   m_Father: {fileID: 667873399}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -3131,7 +3028,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1089093786}
+  m_Father: {fileID: 1244591991}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3591,6 +3488,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 667873399}
+  - {fileID: 1117694416}
   - {fileID: 1271423789}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3654,7 +3552,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1340811561
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5417,7 +5315,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1937231030
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5576,6 +5474,45 @@ Transform:
   - {fileID: 807069419}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1910000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 127684530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f8f02e6250b4a129fd0a7edd26addf5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueBoxUI
+  nameText: {fileID: 632684704}
+  bodyText: {fileID: 1194190106}
+  gm: {fileID: 1847790048}
+  dl: {fileID: 127684534}
+  characters:
+  - key: Ben
+    displayName: Benjamin
+    nameColor: {r: 0.9098039, g: 0.57254905, b: 0.101960786, a: 1}
+    role: INFANTRY // RECONNAISSANCE
+    bio: Cadet operative currently stationed in the Endless Tower facility. Monitored
+      for emotional fluctuations under high-stress deployment.
+    fullBodyArt: {fileID: 5666417070881322695, guid: a4dad05aded2aa04ab5103b14249697e, type: 3}
+    emotionPortraits:
+    - {fileID: -5428013303727620233, guid: e384384476c817347b76bdee6470965c, type: 3}
+    - {fileID: -975995788227506072, guid: 4677a880b4241e74aade2713c6ca28d5, type: 3}
+    - {fileID: -8387853870479077587, guid: e92630fb20a061041b429ef7e775287e, type: 3}
+    - {fileID: 7010045283696991931, guid: 8cb2858db48b2954885eac28a7446728, type: 3}
+    - {fileID: -2042583952720039256, guid: 749d088aea33b8e46ac49fb96a1cc8ef, type: 3}
+    - {fileID: -8423088537335506301, guid: 732bbaf0186597d409ce87e69e3c3203, type: 3}
+  - key: Chapter Select
+    displayName: Chapter Select
+    nameColor: {r: 0.3882353, g: 0.6784314, b: 0.8862745, a: 1}
+    role: ''
+    bio: ''
+    fullBodyArt: {fileID: 0}
+    emotionPortraits: []
+  colorFadeSpeed: 6
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
