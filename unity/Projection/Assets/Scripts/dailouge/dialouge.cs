@@ -26,7 +26,21 @@ public class dialouge : MonoBehaviour
     public DLname dl; 
     public bool enabledl;
     public int index;
+    public DialogueBoxUI box;
     bool Histenabled = false;
+
+    /// <summary>
+    /// Pushes the current line's speaker + emotion into the text box UI so
+    /// the nameplate / portrait / background color follow the line data.
+    /// Safe to call when no DialogueBoxUI is present.
+    /// </summary>
+    void SyncBox(int i)
+    {
+        if (box == null) box = GetComponent<DialogueBoxUI>();
+        if (box == null || lines == null || i < 0 || i >= lines.Length) return;
+        box.SetSpeaker(lines[i].name);
+        box.SetEmotion(lines[i].emotion);
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start() // WALL OF TEXT 
@@ -69,8 +83,8 @@ public class dialouge : MonoBehaviour
     //    lines[9].eventname = "Benleaveleft";
         //new scene logic here
         lines[17].lineofd = "";
-        
-        
+
+        SyncBox(index);
     }
     public void Populatehistory()
     {
@@ -148,6 +162,7 @@ public class dialouge : MonoBehaviour
     void Startdialouge()
     {
         index = 0;
+        SyncBox(index);
         StartCoroutine(Typeline());
     }
     void NextLine()
@@ -157,6 +172,7 @@ public class dialouge : MonoBehaviour
             index++;
             text.text = string.Empty;
             Setcolor();
+            SyncBox(index);
             StartCoroutine(Typeline());
         }
         else
@@ -214,8 +230,9 @@ public class dialouge : MonoBehaviour
         dl.Changetext(lines[index].name);
         StopAllCoroutines();
         text.text = string.Empty;
+        SyncBox(index);
         StartCoroutine(Typeline());
-    }        
+    }
     public void Previousline()
     {
         if (index > 0)
@@ -224,6 +241,7 @@ public class dialouge : MonoBehaviour
            text.text = string.Empty;
            index = index--;
            index = index--;
+           SyncBox(index);
            StartCoroutine(Typeline());
 
         }
