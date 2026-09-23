@@ -1,7 +1,6 @@
 using UnityEngine;
 using TMPro;
 using System.Collections;
-using System;
 
 /// <summary>
 /// Dialogue runner: plays back a loaded DialogueScript.
@@ -213,8 +212,11 @@ public class dialouge : MonoBehaviour
         if (lines == null || i < 0 || i >= lines.Length) return;
 
         string speaker = lines[i].SpeakerName;
-        bool chapterSelect = !string.IsNullOrEmpty(speaker)
-            && speaker.Trim().Equals("Chapter Select", StringComparison.OrdinalIgnoreCase);
+
+        // Layout follows the game state, not the speaker name: everything
+        // while browsing the chapter select screen is an announcement
+        // (some previews are spoken lines and must NOT flip the layout).
+        bool chapterSelect = gm != null && !gm.gameactive;
 
         if (box != null)
         {
@@ -222,7 +224,7 @@ public class dialouge : MonoBehaviour
             box.SetSpeaker(speaker);
         }
 
-        // only real dialogue is logged (chapter select / intro is not)
+        // only real dialogue is logged (chapter select previews are not)
         if (!chapterSelect && his != null && !string.IsNullOrEmpty(lines[i].Text))
             his.Record(speaker, lines[i].Text, i);
 

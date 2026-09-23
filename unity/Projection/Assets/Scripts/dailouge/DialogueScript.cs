@@ -1,28 +1,50 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Loads dialogue from plain-text files under Assets/Resources/Dialogue.
+/// Loads dialogue from JSON files under Assets/Resources/Dialogue.
 ///
-/// Format — one entry per line:
+/// A file is one object with a "lines" array — human readable and machine
+/// readable, editable in any text editor:
 ///
-///     NAME | EMOTION | EVENT | TEXT
+/// {
+///   "lines": [
+///     { "id": "", "speaker": "Ben", "emotion": "keep", "eventName": "", "text": "When the giant wakes..." },
+///     { "id": "", "speaker": "Ben", "emotion": "keep", "eventName": "explosiveentrance", "text": "..." }
+///   ]
+/// }
 ///
-///   NAME    : speaker key, matched against DialogueBoxUI CharacterVisuals
-///             ('-' or blank = no speaker)
-///   EMOTION : '-' / 'keep' keeps the current emotion; neutral, embarrassed,
-///             happy, sad, stoic, angry (or the raw 0..5 index) sets one
-///   EVENT   : gameplay event fired when the line shows ('-' = none)
-///   TEXT    : the spoken line ('-' = empty). May contain '|' — only the
-///             first three separators count.
+/// Fields:
+///   id        : optional stable id, usable for jumps (SetlineById)
+///   speaker   : key matched against DialogueBoxUI CharacterVisuals ("" = none)
+///   emotion   : "keep" leaves the current mood alone (emotions persist
+///               until changed); neutral, embarrassed, happy, sad, stoic,
+///               angry (or the raw "0".."5" index) set an explicit one
+///   eventName : gameplay event fired when the line shows ("" = none)
+///   text      : the spoken line ("" = empty)
 ///
-/// Lines starting with '#' are comments. A line starting with '@' gives the
-/// NEXT entry a stable id (for events/jumps/saves). Files are concatenated
-/// in the order their paths are passed to Load(), so entry indices are
-/// simply: all lines of file 1, then all lines of file 2, ...
+/// Files are concatenated in the order their paths are passed to Load(),
+/// so entry indices are simply: all lines of file 1, then file 2, ...
 /// </summary>
 public static class DialogueScript
 {
+    [Serializable]
+    public class EntryData
+    {
+        public string id = "";
+        public string speaker = "";
+        public string emotion = "keep";
+        public string eventName = "";
+        public string text = "";
+    }
+
+    [Serializable]
+    public class FileData
+    {
+        public EntryData[] lines = new EntryData[0];
+    }
+
     /// <summary>Load and concatenate the given Resources paths into one script.</summary>
     public static DialogueLine[] Load(IEnumerable<string> resourcePaths)
     {
@@ -37,9 +59,34 @@ public static class DialogueScript
                 continue;
             }
 
-            int before = lines.Count;
-            Parse(asset.text, path, lines);
-            Debug.Log("DialogueScript: loaded " + (lines.Count - before) + " lines from " + path);
+            FileData data = null;
+            try
+            {
+                data = JsonUtility.FromJson<FileData>(asset.text);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("DialogueScript: " + path + " is not valid JSON: " + e.Message);
+                continue;
+            }
+            if (data == null || data.lines == null)
+            {
+                Debug.LogError("DialogueScript: " + path + " must contain an object with a \"lines\" array.");
+                continue;
+            }
+
+            for (int i = 0; i < data.lines.Length; i++)
+            {
+                EntryData e = data.lines[i];
+                if (e == null) continue;
+                lines.Add(new DialogueLine(
+                    e.speaker,
+                    e.text,
+                    e.eventName,
+                    ParseEmotion(e.emotion, path, i + 1),
+                    e.id));
+            }
+            Debug.Log("DialogueScript: loaded " + data.lines.Length + " lines from " + path);
         }
 
         if (lines.Count == 0)
@@ -49,55 +96,15 @@ public static class DialogueScript
         return lines.ToArray();
     }
 
-    static void Parse(string content, string source, List<DialogueLine> lines)
+    static int ParseEmotion(string raw, string source, int entryNo)
     {
-        string pendingId = string.Empty;
-        string[] rawLines = content.Replace("\r\n", "\n").Split('\n');
-
-        for (int i = 0; i < rawLines.Length; i++)
-        {
-            string raw = rawLines[i].Trim();
-
-            if (raw.Length == 0 || raw.StartsWith("#")) continue;      // blank / comment
-            if (raw.StartsWith("@"))                                   // @id for the next entry
-            {
-                pendingId = raw.Substring(1).Trim();
-                continue;
-            }
-
-            // only the first three '|' separate columns — text may contain more
-            string[] parts = raw.Split(new char[] { '|' }, 4);
-            if (parts.Length < 4)
-            {
-                Debug.LogError("DialogueScript: " + source + ":" + (i + 1) +
-                    " needs 4 columns (NAME | EMOTION | EVENT | TEXT), got: " + raw);
-                continue;
-            }
-
-            string speaker = Clean(parts[0]);
-            string emotion = Clean(parts[1]);
-            string evt = Clean(parts[2]);
-            string text = parts[3].Trim();
-            if (text == "-") text = string.Empty;
-
-            lines.Add(new DialogueLine(speaker, text, evt, ParseEmotion(emotion, source, i + 1), pendingId));
-            pendingId = string.Empty;
-        }
-    }
-
-    static string Clean(string column)
-    {
-        string value = column.Trim();
-        return value == "-" ? string.Empty : value;
-    }
-
-    static int ParseEmotion(string raw, string source, int lineNo)
-    {
-        if (string.IsNullOrEmpty(raw) || raw == "keep") return -1; // persist current emotion
+        if (string.IsNullOrEmpty(raw) || raw == "-") raw = "keep";
+        string key = raw.Trim().ToLowerInvariant();
 
         int index;
-        switch (raw.ToLowerInvariant())
+        switch (key)
         {
+            case "keep": return -1; // persist current emotion
             case "neutral": index = (int)DialogueEmotion.Neutral; break;
             case "embarrassed":
             case "embaresed": index = (int)DialogueEmotion.Embarrassed; break;
@@ -106,18 +113,18 @@ public static class DialogueScript
             case "stoic": index = (int)DialogueEmotion.Stoic; break;
             case "angry": index = (int)DialogueEmotion.Angry; break;
             default:
-                if (int.TryParse(raw, out index))
+                if (int.TryParse(key, out index))
                 {
                     break;
                 }
-                Debug.LogWarning("DialogueScript: " + source + ":" + lineNo +
-                    " unknown emotion '" + raw + "', keeping current.");
+                Debug.LogWarning("DialogueScript: " + source + " entry " + entryNo +
+                    " has unknown emotion '" + raw + "', keeping current.");
                 return -1;
         }
 
         if (index < 0 || index > (int)DialogueEmotion.Angry)
         {
-            Debug.LogWarning("DialogueScript: " + source + ":" + lineNo +
+            Debug.LogWarning("DialogueScript: " + source + " entry " + entryNo +
                 " emotion index " + index + " out of range, keeping current.");
             return -1;
         }

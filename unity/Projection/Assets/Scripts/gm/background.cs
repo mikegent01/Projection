@@ -11,7 +11,21 @@ public class Background : MonoBehaviour
     public int svbg = 0;
     public void Changebg(int num)
     {
-        gameObject.GetComponent<SpriteRenderer>().sprite = backgrounds[num];
+        if (backgrounds == null || num < 0 || num >= backgrounds.Length)
+        {
+            Debug.LogError("Background.Changebg: index " + num + " is out of range!");
+            return;
+        }
+        if (backgrounds[num] == null)
+        {
+            // keep the current sprite instead of going blank — the slot
+            // still needs art assigned in the inspector!
+            Debug.LogWarning("Background.Changebg: slot " + num + " has no sprite assigned, keeping current background.");
+        }
+        else
+        {
+            gameObject.GetComponent<SpriteRenderer>().sprite = backgrounds[num];
+        }
         svbg = num;
         if (num == 2)
         {

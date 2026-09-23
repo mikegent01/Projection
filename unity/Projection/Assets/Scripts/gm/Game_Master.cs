@@ -177,6 +177,7 @@ public class Game_Master : MonoBehaviour
             Numbg = int.Parse(datavalues[0]);
             Numline = int.Parse(datavalues[1]);
 
+            gameactive = true; // loading means playing — box uses dialogue layout
             bg.Changebg(Numbg);
 
             dl.gameObject.SetActive(true);
@@ -203,6 +204,7 @@ public class Game_Master : MonoBehaviour
     /// CH01 START FUN
     public void Chp0()
     {
+        gameactive = true; // set BEFORE Setline so the box switches to dialogue layout
         dl.gameObject.SetActive(true);
         ppc = scam.GetComponent<PixelPerfectCamera>();
         ppc.assetsPPU = 101;
@@ -218,7 +220,6 @@ public class Game_Master : MonoBehaviour
         dl.enabledl = true;
         bg.Changebg(5); //scene one begin!
         hb.gameObject.SetActive(false);
-        gameactive = true;
     }
     public void Handleevents(string Eventnamer)
     {
