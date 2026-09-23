@@ -78,14 +78,30 @@ public class DialogueBoxUI : MonoBehaviour
     [Tooltip("How fast the emotion background color blends toward its target.")]
     public float colorFadeSpeed = 6f;
 
+    [Header("Chapter Select restyle")]
+    [SerializeField] float chapterFontSize = 46f;
+    [SerializeField] Color32 chapterAccentColor = new Color32(0xE0, 0xB3, 0x51, 0xFF); // gold
+    [SerializeField] Color32 chapterTextPanelColor = new Color32(0x1E, 0x20, 0x2B, 0xFF);
+
+    public enum BoxMode
+    {
+        Dialogue,      // mock-up layout: nameplate + portrait left, text right
+        ChapterSelect  // full-width, centered announcement panel, no portrait/nameplate
+    }
+
     // generated runtime pieces
     RectTransform root;
+    RectTransform leftPanelRT;
+    Image textPanelImg;
+    Image leftAccentImg;
+    Image rightAccentImg;
     Image glowImage;      // emotion-tinted glow at the bottom of the portrait area
     Image shadeImage;     // dark fade on top of the glow
     RectTransform portraitRT;
     Image portraitImage;
     CharacterVisual activeCharacter;
     DialogueEmotion activeEmotion = DialogueEmotion.Neutral;
+    BoxMode activeMode = BoxMode.Dialogue;
     Color targetGlow;
     Sprite fadeSprite;
     Texture2D fadeTexture;
@@ -147,6 +163,49 @@ public class DialogueBoxUI : MonoBehaviour
     {
         SetSpeaker(speaker);
         SetEmotion(emotionIndex);
+    }
+
+    /// <summary>Switch between the dialogue layout and the chapter-select layout.</summary>
+    public void SetChapterSelectMode(bool chapterSelect)
+    {
+        SetMode(chapterSelect ? BoxMode.ChapterSelect : BoxMode.Dialogue);
+    }
+
+    /// <summary>Switch the whole text box between <see cref="BoxMode"/> layouts.</summary>
+    public void SetMode(BoxMode mode)
+    {
+        if (mode == activeMode) return;
+        activeMode = mode;
+        ApplyMode();
+    }
+
+    /// <summary>Current layout mode of the text box.</summary>
+    public BoxMode Mode => activeMode;
+
+    void ApplyMode()
+    {
+        bool chapter = activeMode == BoxMode.ChapterSelect;
+
+        // Chapter select: drop the character column entirely and let the
+        // text panel take the full width with big centered text.
+        if (leftPanelRT != null) leftPanelRT.gameObject.SetActive(!chapter);
+
+        if (textPanelImg != null)
+        {
+            textPanelImg.color = chapter ? (Color)chapterTextPanelColor : (Color)textPanelColor;
+            RectTransform rt = (RectTransform)textPanelImg.transform;
+            rt.offsetMin = new Vector2(chapter ? 0f : leftPanelWidth + panelGap, 0f);
+        }
+
+        Color32 accent = chapter ? chapterAccentColor : accentColor;
+        if (leftAccentImg != null) leftAccentImg.color = accent;
+        if (rightAccentImg != null) rightAccentImg.color = accent;
+
+        if (bodyText != null)
+        {
+            bodyText.fontSize = chapter ? chapterFontSize : bodyFontSize;
+            bodyText.alignment = chapter ? TextAlignmentOptions.Center : TextAlignmentOptions.TopLeft;
+        }
     }
 
     // ------------------------------------------------------------- lookup
@@ -227,12 +286,13 @@ public class DialogueBoxUI : MonoBehaviour
 
         // Left panel: nameplate on top, portrait on emotion gradient below.
         RectTransform leftPanel = MakePanel("Character Panel", root, leftPanelColor);
+        leftPanelRT = leftPanel;
         Stretch(leftPanel, 0f, 0f, 0f, 1f);
         leftPanel.pivot = new Vector2(0f, 0.5f);
         leftPanel.anchoredPosition = Vector2.zero;
         leftPanel.sizeDelta = new Vector2(leftPanelWidth, 0f);
 
-        MakeAccent(leftPanel, "Top Accent");
+        leftAccentImg = MakeAccent(leftPanel, "Top Accent");
 
         RectTransform nameplate = MakePanel("Nameplate", leftPanel, nameplateColor);
         nameplate.anchorMin = new Vector2(0f, 1f);
@@ -265,13 +325,14 @@ public class DialogueBoxUI : MonoBehaviour
 
         // Right panel: the dialogue text itself.
         RectTransform textPanel = MakePanel("Text Panel", root, textPanelColor);
+        textPanelImg = textPanel.GetComponent<Image>();
         textPanel.anchorMin = new Vector2(0f, 0f);
         textPanel.anchorMax = new Vector2(1f, 1f);
         textPanel.pivot = new Vector2(0.5f, 0.5f);
         textPanel.offsetMin = new Vector2(leftPanelWidth + panelGap, 0f);
         textPanel.offsetMax = Vector2.zero;
 
-        MakeAccent(textPanel, "Top Accent");
+        rightAccentImg = MakeAccent(textPanel, "Top Accent");
 
         // Re-parent + restyle the existing text objects so old scene wiring
         // (dialouge.text / dialouge.nametext / DLname) keeps working.
@@ -306,6 +367,8 @@ public class DialogueBoxUI : MonoBehaviour
         RestyleLegacyButton("History", 0);
         RestyleLegacyButton("Load", 1);
         RestyleLegacyButton("Save", 2);
+
+        ApplyMode();
     }
 
     void RestyleLegacyButton(string childName, int slot)

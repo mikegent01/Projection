@@ -1,7 +1,6 @@
 using UnityEngine;
 using TMPro;
 using System.Collections;
-using UnityEditor;
 using Unity.VisualScripting;
 using System;
 [System.Serializable]
@@ -11,7 +10,9 @@ public class Dialougesystem
     public string name;
     public Color color;
     public string eventname;
-    public int emotion;
+    // -1 = keep the current emotion (emotions persist until a line
+    // explicitly changes them). 0..5 = DialogueEmotion values.
+    public int emotion = -1;
 }
 public class dialouge : MonoBehaviour
 {
@@ -27,19 +28,42 @@ public class dialouge : MonoBehaviour
     public bool enabledl;
     public int index;
     public DialogueBoxUI box;
+    // The emotion the dialogue is currently sitting in. Persists across
+    // lines until a line with an explicit (>= 0) emotion changes it.
+    public int currentEmotion = 0;
     bool Histenabled = false;
 
     /// <summary>
-    /// Pushes the current line's speaker + emotion into the text box UI so
-    /// the nameplate / portrait / background color follow the line data.
+    /// Pushes the current line's speaker + mode into the text box UI so the
+    /// nameplate / portrait / layout follow the line data. The emotion only
+    /// updates when the line carries an explicit one (>= 0) — otherwise it
+    /// persists instead of snapping back to neutral.
     /// Safe to call when no DialogueBoxUI is present.
     /// </summary>
     void SyncBox(int i)
     {
         if (box == null) box = GetComponent<DialogueBoxUI>();
         if (box == null || lines == null || i < 0 || i >= lines.Length) return;
-        box.SetSpeaker(lines[i].name);
-        box.SetEmotion(lines[i].emotion);
+
+        string speaker = lines[i].name;
+        bool chapterSelect = !string.IsNullOrEmpty(speaker)
+            && speaker.Trim().Equals("Chapter Select", StringComparison.OrdinalIgnoreCase);
+        box.SetChapterSelectMode(chapterSelect);
+        box.SetSpeaker(speaker);
+
+        if (lines[i].emotion >= 0)
+        {
+            currentEmotion = lines[i].emotion;
+            box.SetEmotion(currentEmotion);
+        }
+    }
+
+    /// <summary>Re-applies currentEmotion to the portrait + background (used by save/load).</summary>
+    public void RestoreEmotion()
+    {
+        if (box == null) box = GetComponent<DialogueBoxUI>();
+        if (box != null && currentEmotion >= 0) box.SetEmotion(currentEmotion);
+        if (emohan != null && currentEmotion >= 0) emohan.ChangeSprite(currentEmotion);
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -47,6 +71,10 @@ public class dialouge : MonoBehaviour
     {
         textspeed = 0.1f;
        // gameObject.SetActive(false);
+        // Emotions persist across lines until a line explicitly changes
+        // them. -1 = "keep whatever emotion is currently showing" — no
+        // snapping back to neutral unless the writing says so.
+        for (int i = 0; i < lines.Length; i++) lines[i].emotion = -1;
         //chapter select lines
         int x = 0;
         while (x != 4)
@@ -65,6 +93,7 @@ public class dialouge : MonoBehaviour
         lines[3].lineofd = "As I climb this endless tower the truth unveils itself.";
         lines[4].lineofd = "When the giant wakes...";
         // begin DL CH0
+        lines[5].emotion = 0; // neutral — chapter 0 opens on a clean slate (explicit choice, not assumed)
         lines[5].lineofd = "The door creeks open as the handle falls off its hinges I quickly pick it up as a rotted wooden piece falls down a splash being heard below me.";
         lines[6].lineofd = "I look up from the door into the room I used to call home.The smell of moldy mildew hits my nose. My nose scrunches up and I recoil.";
         
@@ -75,8 +104,10 @@ public class dialouge : MonoBehaviour
         lines[9].lineofd = "My feet skid across the wet floor, I catch myself before I fall. Could I have been pranked or did the janitors just not do there job. It could have been both for all I knew.";
         lines[10].emotion = 1; //embaresed 
         lines[11].lineofd = "My pants are soaking wet. My face is burning hot, My own self doubt consuming me like the moldy walls of this room. I begin to consider my options.";
+        lines[12].emotion = 2; //happy — "...walk straight ahead with a smile"
         lines[12].lineofd = "I can run away leave this all behind right now or I can look up and walk straight ahead with a smile. ";
         lines[13].lineofd = "I freeze up looking around the room, most seats were empty only the best of the best remained. Do I really deserve to be here?";
+        lines[14].emotion = 4; //stoic — "I ball my fists up and look up", and it stays through the walk
         lines[14].lineofd = "I ball my fists up and look up. Everyone else in the room seems to distracted. The faint smell of mildew and the state of th eothers uniforms tells me it will be okay. ";
         lines[15].lineofd = "I begin to walk forward trying to ignore my soaked pants as they brush against my rough skin. It is a privilege to shower and my lack of confidence left me without it.";
         lines[16].lineofd = "I begin to hyperfocus on my walking one step forward and than another... I walk past empty seats slowly. methodology making sure to not trip ever again...";

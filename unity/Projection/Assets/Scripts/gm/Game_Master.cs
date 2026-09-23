@@ -141,35 +141,70 @@ public class Game_Master : MonoBehaviour
     }
     // save and load systems//
 
+    // persistentDataPath is the only location that is reliably writable in
+    // both the editor and standalone builds (dataPath points into the
+    // install/Assets folder).
+    static string SavePath => Path.Combine(Application.persistentDataPath, "save.dat");
+
     public void Savegame()
     {
-        using (StreamWriter sw = new StreamWriter(Application.dataPath + "/save.dat", false))
+        if (bg == null || dl == null)
         {
-            //You want to edit the file yourself go ahead! this is a csv file first is bg 2nd is line number
-            sw.WriteLine(bg.svbg + "," + dl.index);
+            Debug.LogError("Savegame: missing Background or dialouge reference!");
+            return;
+        }
+        try
+        {
+            // csv line: background, dialogue line, current emotion.
+            // (old 2-field saves still load — extra fields are optional)
+            File.WriteAllText(SavePath, bg.svbg + "," + dl.index + "," + dl.currentEmotion);
+            Debug.Log("Game saved to " + SavePath);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("Savegame failed: " + e.Message);
         }
     }
     int Numbg;
     int Numline;
     public void Loadgame()
     {
-        StreamReader strReader = new StreamReader(Application.dataPath + "/save.dat");
-        bool eof = false;
-        while (!eof)
+        if (!File.Exists(SavePath))
         {
-            string data_string = strReader.ReadLine();
-            if (data_string == null)
+            Debug.LogWarning("Loadgame: no save file found at " + SavePath);
+            return;
+        }
+        try
+        {
+            string[] datavalues = File.ReadAllText(SavePath).Trim().Split(',');
+            if (datavalues.Length < 2)
             {
-                eof = true;
-                break;
+                Debug.LogError("Loadgame: save file is corrupted (expected at least bg,line).");
+                return;
             }
-            var datavalues = data_string.Split(',');
+
             Numbg = int.Parse(datavalues[0]);
             Numline = int.Parse(datavalues[1]);
-            bg.Changebg(Numbg);
-            dl.Setline(Numline);
-        }
 
+            bg.Changebg(Numbg);
+
+            dl.gameObject.SetActive(true);
+            dl.enabledl = true;
+            dl.Setline(Numline); // Setline -> SyncBox restores speaker + mode
+
+            // restore the persisted emotion (saved as optional 3rd field)
+            if (datavalues.Length > 2)
+            {
+                dl.currentEmotion = int.Parse(datavalues[2]);
+                dl.RestoreEmotion();
+            }
+
+            Debug.Log("Game loaded: bg " + Numbg + ", line " + Numline);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("Loadgame failed: " + e.Message);
+        }
     }
     /// CH01 START FUN
     public void Chp0()
