@@ -1,7 +1,6 @@
 using System.Collections;
-using Microsoft.Unity.VisualStudio.Editor;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+
 
 public class Transitionmanager : MonoBehaviour
 {

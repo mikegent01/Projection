@@ -31,7 +31,7 @@ public class dialouge : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start() // WALL OF TEXT 
     {
-        textspeed = 0.01f;
+        textspeed = 0.1f;
        // gameObject.SetActive(false);
         //chapter select lines
         int x = 0;
@@ -66,7 +66,7 @@ public class dialouge : MonoBehaviour
         lines[14].lineofd = "I ball my fists up and look up. Everyone else in the room seems to distracted. The faint smell of mildew and the state of th eothers uniforms tells me it will be okay. ";
         lines[15].lineofd = "I begin to walk forward trying to ignore my soaked pants as they brush against my rough skin. It is a privilege to shower and my lack of confidence left me without it.";
         lines[16].lineofd = "I begin to hyperfocus on my walking one step forward and than another... I walk past empty seats slowly. methodology making sure to not trip ever again...";
-        lines[9].eventname = "Benleaveleft";
+    //    lines[9].eventname = "Benleaveleft";
         //new scene logic here
         lines[17].lineofd = "";
         

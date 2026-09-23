@@ -4,10 +4,7 @@ using UnityEngine;
 public class left_char : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
 
-    }
     public Animator anime;
     public void Playanim(string Eventnamer)
     {
@@ -20,9 +17,5 @@ public class left_char : MonoBehaviour
         anime.Play("Slamout");        
         }        
     }
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+
 }

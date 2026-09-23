@@ -1,10 +1,8 @@
-using UnityEditor.Rendering.Universal;
-using UnityEngine;
+
+  using UnityEngine;
 using UnityEngine.InputSystem;
-    
 using UnityEngine.EventSystems;
 
-  
 public class InputHandler : MonoBehaviour
 {
     #region Variables
