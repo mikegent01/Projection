@@ -1,63 +1,235 @@
 using UnityEngine;
 using TMPro;
 using System.Collections;
-using Unity.VisualScripting;
 using System;
-[System.Serializable]
-public class Dialougesystem
-{
-    public string lineofd;
-    public string name;
-    public Color color;
-    public string eventname;
-    // -1 = keep the current emotion (emotions persist until a line
-    // explicitly changes them). 0..5 = DialogueEmotion values.
-    public int emotion = -1;
-}
+
+/// <summary>
+/// Dialogue runner: plays back a loaded DialogueScript.
+///
+/// Content lives in plain-text files under Assets/Resources/Dialogue
+/// (see DialogueScript for the format) — this class only runs it:
+/// typewriter, speaker/nameplate sync (DialogueBoxUI), emotion bridging,
+/// event dispatch, history recording. Public surface kept stable for
+/// Game_Master / InputHandler / buttons: Dlsetup, NextLinePhaser, Setline,
+/// Previousline, Populatehistory, RestoreEmotion, index, enabledl.
+/// </summary>
 public class dialouge : MonoBehaviour
 {
+    [Header("Wiring")]
     public TextMeshProUGUI text;
     public TextMeshProUGUI nametext;
-    public Dialougesystem[] lines;
     public historyscript his;
     public Game_Master gm;
     public objhist objhist;
     public Emotionhandler emohan;
+    public DLname dl;
+    public DialogueBoxUI box;
+
+    [Header("Script (Resources paths, loaded in order -> stable line indices)")]
+    [SerializeField] string[] scriptFiles = { "Dialogue/chapter_select", "Dialogue/ch0" };
+
+    [Header("Playback")]
     public float textspeed;
-    public DLname dl; 
     public bool enabledl;
     public int index;
-    public DialogueBoxUI box;
-    // The emotion the dialogue is currently sitting in. Persists across
-    // lines until a line with an explicit (>= 0) emotion changes it.
-    public int currentEmotion = 0;
 
     /// <summary>
-    /// Pushes the current line's speaker + mode into the text box UI so the
-    /// nameplate / portrait / layout follow the line data. The emotion only
-    /// updates when the line carries an explicit one (>= 0) — otherwise it
-    /// persists instead of snapping back to neutral.
-    /// Safe to call when no DialogueBoxUI is present.
+    /// The emotion the dialogue is currently sitting in. Persists across
+    /// lines until a line with an explicit (>= 0) emotion changes it.
+    /// </summary>
+    public int currentEmotion = 0;
+
+    DialogueLine[] lines = new DialogueLine[0];
+
+    /// <summary>The loaded script (chapter select previews first, then chapters in order).</summary>
+    public DialogueLine[] Lines => lines;
+
+    /// <summary>Number of loaded lines (0 before Start / when no files were found).</summary>
+    public int LineCount => lines.Length;
+
+    void Start()
+    {
+        if (textspeed <= 0f) textspeed = 0.1f; // safety default (scene normally sets 0.1)
+        lines = DialogueScript.Load(scriptFiles);
+        SyncBox(index);
+    }
+
+    // ------------------------------------------------------------- playback
+
+    /// <summary>Reset to the first line and start typing (chapter select entry point).</summary>
+    public void Dlsetup()
+    {
+        text.text = string.Empty;
+        Startdialouge();
+        enabledl = false;
+    }
+
+    /// <summary>Advance entry point used by InputHandler: emotion hook, then event/advance.</summary>
+    public void NextLinePhaser()
+    {
+        Checknextlineemotion();
+        Checknextlineevent();
+    }
+
+    void Startdialouge()
+    {
+        index = 0;
+        SyncBox(index);
+        StartCoroutine(Typeline());
+    }
+
+    /// <summary>Skip / complete the current line (legacy low-level advance helper).</summary>
+    public void Nextline()
+    {
+        if (index < 0 || index >= lines.Length) return;
+        StopAllCoroutines();
+        text.text = lines[index].Text;
+    }
+
+    void NextLine()
+    {
+        StopAllCoroutines();
+        if (index < lines.Length - 2)
+        {
+            index++;
+            text.text = string.Empty;
+            SyncBox(index);
+            StartCoroutine(Typeline());
+        }
+        else
+        {
+            Debug.Log("End of script!");
+            gameObject.SetActive(false);
+        }
+    }
+
+    public void Setline(int line)
+    {
+        if (lines.Length == 0) return;
+        index = Mathf.Clamp(line, 0, lines.Length - 1);
+        dl.Changetext(lines[index].SpeakerName);
+        StopAllCoroutines();
+        text.text = string.Empty;
+        SyncBox(index);
+        StartCoroutine(Typeline());
+    }
+
+    /// <summary>Jump to the line tagged with an @id in the data files.</summary>
+    public void SetlineById(string id)
+    {
+        for (int i = 0; i < lines.Length; i++)
+        {
+            if (lines[i].Id == id)
+            {
+                Setline(i);
+                return;
+            }
+        }
+        Debug.LogWarning("SetlineById: no line tagged '@" + id + "'.");
+    }
+
+    public void Previousline()
+    {
+        if (index > 0)
+        {
+            index--;
+            StopAllCoroutines();
+            text.text = string.Empty;
+            SyncBox(index);
+            StartCoroutine(Typeline());
+        }
+        else
+        {
+            gameObject.SetActive(false);
+        }
+    }
+
+    IEnumerator Typeline()
+    {
+        if (index < 0 || index >= lines.Length) yield break;
+        foreach (char c in lines[index].Text.ToCharArray())
+        {
+            text.text += c;
+            yield return new WaitForSeconds(textspeed);
+        }
+    }
+
+    // --------------------------------------------------------- line effects
+
+    void Checknextlineemotion()
+    {
+        if (index < 0 || index >= lines.Length) return;
+        if (lines[index].Emotion < 0)
+        {
+            Debug.Log(index + " Next Line dosen't have an emotion!");
+        }
+        else
+        {
+            Debug.Log(index + " has an emotion!");
+            StopAllCoroutines();
+            emohan.ChangeSprite(lines[index].Emotion);
+        }
+    }
+
+    void Checknextlineevent()
+    {
+        if (index < 0 || index >= lines.Length)
+        {
+            Debug.Log("Dialogue finished / no script loaded.");
+            gameObject.SetActive(false);
+            return;
+        }
+
+        if (string.IsNullOrEmpty(lines[index].EventName))
+        {
+            Debug.Log(index + " Next Line dosen't have an event!");
+            StopAllCoroutines();
+            if (index + 1 < lines.Length)
+            {
+                dl.Changetext(lines[index + 1].SpeakerName);
+            }
+            NextLine();
+        }
+        else
+        {
+            Debug.Log(index + " has an event!");
+            StopAllCoroutines();
+            gm.Handleevents(lines[index].EventName);
+            NextLine();
+        }
+    }
+
+    // ------------------------------------------------------------ UI / sync
+
+    /// <summary>
+    /// Pushes the current line's speaker + mode into the text box UI and
+    /// records the line into the field log. The emotion only updates when
+    /// the line carries an explicit one (>= 0) — otherwise it persists
+    /// instead of snapping back to neutral. Safe with no DialogueBoxUI.
     /// </summary>
     void SyncBox(int i)
     {
         if (box == null) box = GetComponent<DialogueBoxUI>();
-        if (box == null || lines == null || i < 0 || i >= lines.Length) return;
+        if (lines == null || i < 0 || i >= lines.Length) return;
 
-        string speaker = lines[i].name;
+        string speaker = lines[i].SpeakerName;
         bool chapterSelect = !string.IsNullOrEmpty(speaker)
             && speaker.Trim().Equals("Chapter Select", StringComparison.OrdinalIgnoreCase);
-        box.SetChapterSelectMode(chapterSelect);
-        box.SetSpeaker(speaker);
+
+        if (box != null)
+        {
+            box.SetChapterSelectMode(chapterSelect);
+            box.SetSpeaker(speaker);
+        }
 
         // only real dialogue is logged (chapter select / intro is not)
-        if (!chapterSelect && his != null && !string.IsNullOrEmpty(lines[i].lineofd))
-            his.Record(speaker, lines[i].lineofd, i);
+        if (!chapterSelect && his != null && !string.IsNullOrEmpty(lines[i].Text))
+            his.Record(speaker, lines[i].Text, i);
 
-        if (lines[i].emotion >= 0)
+        if (lines[i].Emotion >= 0)
         {
-            currentEmotion = lines[i].emotion;
-            box.SetEmotion(currentEmotion);
+            currentEmotion = lines[i].Emotion;
+            if (box != null) box.SetEmotion(currentEmotion);
         }
     }
 
@@ -69,219 +241,12 @@ public class dialouge : MonoBehaviour
         if (emohan != null && currentEmotion >= 0) emohan.ChangeSprite(currentEmotion);
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start() // WALL OF TEXT 
-    {
-        textspeed = 0.1f;
-       // gameObject.SetActive(false);
-        // Emotions persist across lines until a line explicitly changes
-        // them. -1 = "keep whatever emotion is currently showing" — no
-        // snapping back to neutral unless the writing says so.
-        for (int i = 0; i < lines.Length; i++) lines[i].emotion = -1;
-        //chapter select lines
-        int x = 0;
-        while (x != 4)
-        {
-            lines[x].name = "Chapter Select";
-            x++;
-        }
-        while (x != 12)
-        {
-            lines[x].name = "Ben";
-            x++;
-        }        
-      lines[0].lineofd = "The dampness of the hallway I stand in causes.";
-        lines[1].lineofd = "My bones ache in pain but my will has not withered.";
-        lines[2].lineofd = "The past will not dictate my future.";
-        lines[3].lineofd = "As I climb this endless tower the truth unveils itself.";
-        lines[4].lineofd = "When the giant wakes...";
-        // begin DL CH0
-        lines[5].emotion = 0; // neutral — chapter 0 opens on a clean slate (explicit choice, not assumed)
-        lines[5].lineofd = "The door creeks open as the handle falls off its hinges I quickly pick it up as a rotted wooden piece falls down a splash being heard below me.";
-        lines[6].lineofd = "I look up from the door into the room I used to call home.The smell of moldy mildew hits my nose. My nose scrunches up and I recoil.";
-        
-        lines[6].lineofd = "I recognize the smell, I could never really get used to it. I take one step forward another splash is heard I look down to the source of the noise.";
-        lines[7].lineofd = "The broken door handle in my hand stares back at me. I remembered what this room meant to me how the people here used to be not just friends but family.";
-        lines[8].lineofd = "How all of them slowly failed training or moved away. Now its just me its not my home anymore only strangers remain my hand lossens its grip. A thunk is heard on the ground as the door handle lays there in a puddle of its own sorrow. I begin to walk forward trying to forget the past another splash is heard and...";
-        lines[9].eventname = "explosiveentrance";
-        lines[9].lineofd = "My feet skid across the wet floor, I catch myself before I fall. Could I have been pranked or did the janitors just not do there job. It could have been both for all I knew.";
-        lines[10].emotion = 1; //embaresed 
-        lines[11].lineofd = "My pants are soaking wet. My face is burning hot, My own self doubt consuming me like the moldy walls of this room. I begin to consider my options.";
-        lines[12].emotion = 2; //happy — "...walk straight ahead with a smile"
-        lines[12].lineofd = "I can run away leave this all behind right now or I can look up and walk straight ahead with a smile. ";
-        lines[13].lineofd = "I freeze up looking around the room, most seats were empty only the best of the best remained. Do I really deserve to be here?";
-        lines[14].emotion = 4; //stoic — "I ball my fists up and look up", and it stays through the walk
-        lines[14].lineofd = "I ball my fists up and look up. Everyone else in the room seems to distracted. The faint smell of mildew and the state of th eothers uniforms tells me it will be okay. ";
-        lines[15].lineofd = "I begin to walk forward trying to ignore my soaked pants as they brush against my rough skin. It is a privilege to shower and my lack of confidence left me without it.";
-        lines[16].lineofd = "I begin to hyperfocus on my walking one step forward and than another... I walk past empty seats slowly. methodology making sure to not trip ever again...";
-    //    lines[9].eventname = "Benleaveleft";
-        //new scene logic here
-        lines[17].lineofd = "";
-
-        SyncBox(index);
-    }
+    /// <summary>Opens/closes the FIELD LOG overlay (wired to the LOG chip).</summary>
     public void Populatehistory()
     {
-        // opens/closes the redesigned FIELD LOG overlay
         if (his != null)
         {
             his.Toggle();
-        }
-    }
-    public void Dlsetup()
-    {
-        text.text = string.Empty;
-        Startdialouge();
-        enabledl = false;        
-    }
-    public void Nextline()
-    {
-        if (text.text == lines[index].lineofd)
-        {
-            dl.Changetext(lines[index].name);
-        }
-        else
-        {
-            StopAllCoroutines();
-            text.text = lines[index].lineofd;
-        }
-    }
-    public void NextLinePhaser()
-    {
-        Checknextlineemotion();
-        Checknextlineevent();
-    }
-    void Checknextlineemotion()
-    {
-        if (lines[index].emotion < 0)
-        {
-            Debug.Log(index + " Next Line dosen't have an emotion!");
-        }        
-        else
-        {
-            Debug.Log(index + " has an emotion!");
-            StopAllCoroutines();
-            emohan.ChangeSprite(lines[index].emotion);
-        }                       
-    }
-    void Checknextlineevent()
-    {
-        if (lines[index].eventname ==null || lines[index].eventname =="")
-        {
-            Debug.Log(index + " Next Line dosen't have an event!");
-            StopAllCoroutines();
-            dl.Changetext(lines[index+1].name);
-            
-           NextLine();
-        }
-        else
-        {
-            
-            Debug.Log(index + " has an event!");
-            StopAllCoroutines();
-            gm.Handleevents(lines[index].eventname);
-            NextLine();         
-        }               
-    }
-    // Update is called once per frame
-
-    void Startdialouge()
-    {
-        index = 0;
-        SyncBox(index);
-        StartCoroutine(Typeline());
-    }
-    void NextLine()
-    {
-        if (index < lines.Length - 2)
-        {
-            index++;
-            text.text = string.Empty;
-            Setcolor();
-            SyncBox(index);
-            StartCoroutine(Typeline());
-        }
-        else
-        {
-            Debug.Log("End of script!");
-            gameObject.SetActive(false);
-        }
-    }
-    void Setcolor()
-    {
-        if (lines[index].color != null)
-        {
-            if (lines[index].name != null )
-            {
-                Debug.Log(index + "name color!");
-                Characolor(lines[index].name);
-                
-            }
-            else
-            {
-            Debug.Log(index + "null color!");
-
-            nametext.color = lines[index].color;
-                
-            }            
-        }
-        else
-        {
-
-                if (lines[index].color != new Color32(0, 0, 0, 255))
-                {
-                    lines[index].color = new Color32(0, 0, 0, 255);
-                    nametext.color = new Color32(0, 0, 0, 255);
-                    Debug.Log(index + "No Chara Color found, or cutom color set setting to black!");
-                }
-                else
-            {
-                    Debug.Log(index + "Custom Color set!");
-            }
-            }
-    }
-
-    void Characolor(String name)
-    {
-        name = name.ToLower();
-        if (name == "ben" || name == "benjamin"|| name == "allec")
-        {
-            lines[index].color = new Color32(158, 255, 0, 255);
-            nametext.color = new Color32(158, 255, 0, 255);
-        }
-    }
-    public void Setline(int line)
-    {
-        index = line; //index actual line number
-        dl.Changetext(lines[index].name);
-        StopAllCoroutines();
-        text.text = string.Empty;
-        SyncBox(index);
-        StartCoroutine(Typeline());
-    }
-    public void Previousline()
-    {
-        if (index > 0)
-        {
-            StopAllCoroutines();
-           text.text = string.Empty;
-           index = index--;
-           index = index--;
-           SyncBox(index);
-           StartCoroutine(Typeline());
-
-        }
-        else
-        {
-            gameObject.SetActive(false);
-        }
-    }    
-    IEnumerator Typeline()
-    {
-        foreach (char c in lines[index].lineofd.ToCharArray())
-        {
-            text.text += c;
-            yield return new WaitForSeconds(textspeed);
         }
     }
 }

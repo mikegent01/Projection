@@ -104,13 +104,13 @@ public class historyscript : MonoBehaviour
         entries.Clear();
         lastRecordedLine = -1;
 
-        if (dl != null && dl.lines != null)
+        if (dl != null && dl.Lines != null)
         {
-            int last = Mathf.Min(currentLineInclusive, dl.lines.Length - 1);
+            int last = Mathf.Min(currentLineInclusive, dl.Lines.Length - 1);
             for (int i = firstHistoryLine; i <= last; i++)
             {
-                if (string.IsNullOrEmpty(dl.lines[i].lineofd)) continue;
-                entries.Add(new Entry { speaker = dl.lines[i].name, text = dl.lines[i].lineofd });
+                if (string.IsNullOrEmpty(dl.Lines[i].Text)) continue;
+                entries.Add(new Entry { speaker = dl.Lines[i].SpeakerName, text = dl.Lines[i].Text });
             }
             lastRecordedLine = currentLineInclusive;
         }

@@ -4,10 +4,9 @@ using UnityEngine;
 /// Emotions a speaker can be in while a dialogue line is shown.
 ///
 /// The numeric values are locked to the sprite slot order already used by
-/// Emotionhandler and by the "emotion" field on each Dialougesystem line,
-/// so existing serialized scene data keeps working:
+/// Emotionhandler and by the emotion column in the dialogue data files
+/// (see DialogueScript), so existing data keeps working:
 /// 0 Neutral, 1 Embarrassed, 2 Happy, 3 Sad, 4 Stoic, 5 Angry.
-/// (e.g. dialouge sets lines[10].emotion = 1 //embaresed)
 /// </summary>
 public enum DialogueEmotion
 {
