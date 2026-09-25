@@ -35,54 +35,26 @@ public class dialouge : MonoBehaviour
 
     void C0A0()
     {
-      // begin DL CH0
-        lines[5].lineofd = "Rot. Mold. Decay.";
-        lines[6].lineofd = "These words are important to me they mean home.";
-        lines[7].lineofd = "I slowly open the door...";
-        // door handle falls off
-        // splash sound effect 
-        lines[8].lineofd = "...";
-        // cut to floor
-        // cut to face
-        // cut to floor
-        lines[9].lineofd = "What am I even doing.";
-        //kick door sound
-        lines[10].lineofd = "I have been talking to myself outloud like some kind of philosopher.";
-        // kick door sound 
-        // cracks open
-        lines[11].lineofd = "Finally";
-        // walk inside 
-        //new scene logic here
-        lines[12].lineofd = "This place sucks.";
-        lines[17].lineofd = "";    
+        lines.Add(new Dialougesystem { lineofd = "Rot. Mold. Decay.", name = "Ben" });
+        lines.Add(new Dialougesystem { lineofd = "These words are important to me they mean home.", name = "Ben" });
+        lines.Add(new Dialougesystem { lineofd = "I slowly open the door...", name = "Ben" });
+        lines.Add(new Dialougesystem { lineofd = "...", name = "Ben" });
+        lines.Add(new Dialougesystem { lineofd = "What am I even doing.", name = "Ben" });
+        lines.Add(new Dialougesystem { lineofd = "I have been talking to myself outloud like some kind of philosopher.", name = "Ben" });
+        lines.Add(new Dialougesystem { lineofd = "Finally", name = "Ben" });
+        lines.Add(new Dialougesystem { lineofd = "This place sucks.", name = "Ben" });
+        lines.Add(new Dialougesystem { name = "Ben" });
     }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start() // WALL OF TEXT 
+    void Start()
     {
-        
         textspeed = 0.1f;
-       // gameObject.SetActive(false);
-        //chapter select lines
-        int x = 0;
-        while (x != 4)
-        {
-            lines[x].name = "Chapter Select";
-            x++;
-        }
-        while (lines[x].name == null)
-        {
-            lines[x].name = "Ben";
-            Debug.Log(index + "Test");
-            x++;
-        }    
-      lines[0].lineofd = "The dampness of the hallway I stand in causes.";
-        lines[1].lineofd = "My bones ache in pain but my will has not withered.";
-        lines[2].lineofd = "The past will not dictate my future.";
-        lines[3].lineofd = "As I climb this endless tower the truth unveils itself.";
-        lines[4].lineofd = "When the giant wakes...";
-      C0A0();
-        
-        
+        lines.Clear();
+        lines.Add(new Dialougesystem { lineofd = "The dampness of the hallway I stand in causes.", name = "Chapter Select" });
+        lines.Add(new Dialougesystem { lineofd = "My bones ache in pain but my will has not withered.", name = "Chapter Select" });
+        lines.Add(new Dialougesystem { lineofd = "The past will not dictate my future.", name = "Chapter Select" });
+        lines.Add(new Dialougesystem { lineofd = "As I climb this endless tower the truth unveils itself.", name = "Chapter Select" });
+        lines.Add(new Dialougesystem { lineofd = "When the giant wakes...", name = "Ben" });
+        C0A0();
     }
     public void Populatehistory()
     {
