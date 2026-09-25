@@ -8,6 +8,7 @@ using System.Collections.Generic;
 [System.Serializable]
 public class Dialougesystem
 {
+    List<string> dialouge = new List<string>();
     public string lineofd;
     public string name;
     public Color color;
@@ -18,8 +19,7 @@ public class dialouge : MonoBehaviour
 {
     public TextMeshProUGUI text;
     public TextMeshProUGUI nametext;
-    List<string> Story = new List<string>();
-
+    public Dialougesystem[] lines;
     public historyscript his;
     public Game_Master gm;
     public objhist objhist;
@@ -35,7 +35,6 @@ public class dialouge : MonoBehaviour
 
     void C0A0()
     {
-        dialouge.
       // begin DL CH0
         lines[5].lineofd = "Rot. Mold. Decay.";
         lines[6].lineofd = "These words are important to me they mean home.";
@@ -60,8 +59,7 @@ public class dialouge : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start() // WALL OF TEXT 
     {
-        Story.Add("Poggers");
-        Debug.Log(Story[0]);
+        
         textspeed = 0.1f;
        // gameObject.SetActive(false);
         //chapter select lines
