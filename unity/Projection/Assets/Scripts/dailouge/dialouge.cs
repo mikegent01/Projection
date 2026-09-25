@@ -19,7 +19,7 @@ public class dialouge : MonoBehaviour
 {
     public TextMeshProUGUI text;
     public TextMeshProUGUI nametext;
-    public Dialougesystem[] lines;
+    public List<Dialougesystem> lines;
     public historyscript his;
     public Game_Master gm;
     public objhist objhist;
@@ -164,7 +164,7 @@ public class dialouge : MonoBehaviour
     }
     void NextLine()
     {
-        if (index < lines.Length - 2)
+        if (index < lines.Count - 2)
         {
             index++;
             text.text = string.Empty;
