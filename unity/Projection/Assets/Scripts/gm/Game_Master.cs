@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using JetBrains.Annotations;
 using Unity.Collections;
 using System;
+using System.Collections.Generic;
 using UnityEngine.Rendering.Universal;
 using Unity.VisualScripting;
 public class Game_Master : MonoBehaviour

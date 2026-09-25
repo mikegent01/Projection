@@ -4,6 +4,7 @@ using System.Collections;
 using UnityEditor;
 using Unity.VisualScripting;
 using System;
+using System.Collections.Generic;
 [System.Serializable]
 public class Dialougesystem
 {
@@ -17,7 +18,8 @@ public class dialouge : MonoBehaviour
 {
     public TextMeshProUGUI text;
     public TextMeshProUGUI nametext;
-    public Dialougesystem[] lines;
+    List<string> Story = new List<string>();
+
     public historyscript his;
     public Game_Master gm;
     public objhist objhist;
@@ -28,9 +30,38 @@ public class dialouge : MonoBehaviour
     public int index;
     bool Histenabled = false;
 
+
+
+
+    void C0A0()
+    {
+        dialouge.
+      // begin DL CH0
+        lines[5].lineofd = "Rot. Mold. Decay.";
+        lines[6].lineofd = "These words are important to me they mean home.";
+        lines[7].lineofd = "I slowly open the door...";
+        // door handle falls off
+        // splash sound effect 
+        lines[8].lineofd = "...";
+        // cut to floor
+        // cut to face
+        // cut to floor
+        lines[9].lineofd = "What am I even doing.";
+        //kick door sound
+        lines[10].lineofd = "I have been talking to myself outloud like some kind of philosopher.";
+        // kick door sound 
+        // cracks open
+        lines[11].lineofd = "Finally";
+        // walk inside 
+        //new scene logic here
+        lines[12].lineofd = "This place sucks.";
+        lines[17].lineofd = "";    
+    }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start() // WALL OF TEXT 
     {
+        Story.Add("Poggers");
+        Debug.Log(Story[0]);
         textspeed = 0.1f;
        // gameObject.SetActive(false);
         //chapter select lines
@@ -40,35 +71,18 @@ public class dialouge : MonoBehaviour
             lines[x].name = "Chapter Select";
             x++;
         }
-        while (x != 12)
+        while (lines[x].name == null)
         {
             lines[x].name = "Ben";
+            Debug.Log(index + "Test");
             x++;
-        }        
+        }    
       lines[0].lineofd = "The dampness of the hallway I stand in causes.";
         lines[1].lineofd = "My bones ache in pain but my will has not withered.";
         lines[2].lineofd = "The past will not dictate my future.";
         lines[3].lineofd = "As I climb this endless tower the truth unveils itself.";
         lines[4].lineofd = "When the giant wakes...";
-        // begin DL CH0
-        lines[5].lineofd = "The door creeks open as the handle falls off its hinges I quickly pick it up as a rotted wooden piece falls down a splash being heard below me.";
-        lines[6].lineofd = "I look up from the door into the room I used to call home.The smell of moldy mildew hits my nose. My nose scrunches up and I recoil.";
-        
-        lines[6].lineofd = "I recognize the smell, I could never really get used to it. I take one step forward another splash is heard I look down to the source of the noise.";
-        lines[7].lineofd = "The broken door handle in my hand stares back at me. I remembered what this room meant to me how the people here used to be not just friends but family.";
-        lines[8].lineofd = "How all of them slowly failed training or moved away. Now its just me its not my home anymore only strangers remain my hand lossens its grip. A thunk is heard on the ground as the door handle lays there in a puddle of its own sorrow. I begin to walk forward trying to forget the past another splash is heard and...";
-        lines[9].eventname = "explosiveentrance";
-        lines[9].lineofd = "My feet skid across the wet floor, I catch myself before I fall. Could I have been pranked or did the janitors just not do there job. It could have been both for all I knew.";
-        lines[10].emotion = 1; //embaresed 
-        lines[11].lineofd = "My pants are soaking wet. My face is burning hot, My own self doubt consuming me like the moldy walls of this room. I begin to consider my options.";
-        lines[12].lineofd = "I can run away leave this all behind right now or I can look up and walk straight ahead with a smile. ";
-        lines[13].lineofd = "I freeze up looking around the room, most seats were empty only the best of the best remained. Do I really deserve to be here?";
-        lines[14].lineofd = "I ball my fists up and look up. Everyone else in the room seems to distracted. The faint smell of mildew and the state of th eothers uniforms tells me it will be okay. ";
-        lines[15].lineofd = "I begin to walk forward trying to ignore my soaked pants as they brush against my rough skin. It is a privilege to shower and my lack of confidence left me without it.";
-        lines[16].lineofd = "I begin to hyperfocus on my walking one step forward and than another... I walk past empty seats slowly. methodology making sure to not trip ever again...";
-    //    lines[9].eventname = "Benleaveleft";
-        //new scene logic here
-        lines[17].lineofd = "";
+      C0A0();
         
         
     }
