@@ -119,3 +119,6 @@ out/
 *.dat
 *.log
 *.html
+
+### Story notes (local only) ###
+story/
