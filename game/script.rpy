@@ -1,33 +1,12 @@
 ﻿
 default test_room = 0
+default inventory = []
+default player_weapon_choice = None
 default preferences.text_cps = 30
 label start:
     #     $ quick_menu = False uncomment on deployment
-    $ player.apply_room_temperature(72)
-    $ player.inventory.add_item("Classified Mission Sheet")
-    $ player.inventory.add_item("Radio")
-    $ player.inventory.add_item("Paper")
-    $ player.inventory.add_item("Pencil")
     play music "audio/Music/Boot Camp/boot_camp.mp3" volume 0.5 
-    $ missions["active"].append({
-        "title": "Repair the projector",
-        "description": "I need to figure out how to repair the projector. The drill sargent ordered me to repair it but I have never fixed anything in my life...",
-        "objectives": ["Find a speciality screwdriver", "Replace the front lens", "Replace the back plate","Test the power supply"], 
-        "progress": 0, 
-    })
-    
-    $ missions["active"].append({
-        "title": "Order a new uniform",
-        "description": "I came in to todays meeting without a proper uniform, I should work on getting a new one. I can try looking at the main desk or I can try to ask around for someone that would have a uniform.",
-        "objectives": ["Talk to the quartermaster at front desk", "Check the supply room", "Go to the military shop"], 
-        "progress": 0,
-    })    
     scene stage1 with None
-    show screen stagecurtians
-    show screen samuel
-    show screen drill_sargent
-    show screen game_screen
-    $ movement_enabled = False
     BEN "I can only feel excitement, as I finally go to sit down."
     scene satgescene9 with None
     BEN "We are going on a real mission, no more training, no more drills. I finally can put my skills to good use."
@@ -117,31 +96,22 @@ label start:
     DRI "good you are dismissed."
 
     "As I turn around I notice two people sitting in there seats, prehaps I should talk to one of them and ask them for help."
-    show screen checkKey  
-    show screen HUD
+
+    scene empty_stage_animation with None
+    show light_turning_on_effect
+    "I realize my contacts are not in ..."
+    "My body feels lighter, I should get my bearings.."
 
 label intreactivesection01:
-    if not game_state["chapter_1"]["projector_room"]["viewed_tutorial"]:
-        scene empty_stage_animation with None
-        show light_turning_on_effect
-        "I realize my contacts are not in ..."
-        "My body feels lighter, I should get my bearings.."
-        $ movement_enabled = True
-        $ game_state["chapter_1"]["projector_room"]["viewed_tutorial"] = True
-        window hide
-        $ renpy.pause(45.0, hard=True)
+    menu:
+        "Talk to the man in the front seat":
+            jump FrontSeat
+        "Talk to the man in the back seat":
+            jump BackSeat
+        "Ask the drill sergeant to go over it again":
+            jump DrillSergeantTalk
 
-
-    if not game_state["chapter_1"]["projector_room"]["driwalkedaway"] and movement_enabled:
-        scene walkaway1 at fit_screen
-        $ renpy.pause(0.85, hard=True)
-        $ game_state["chapter_1"]["projector_room"]["driwalkedaway"] = True
-        jump intreactivesection01
-    else:
-        scene expression "images/bg/Starting_Room/9/walkaway9.png" at fit_screen
-        $ renpy.pause()  
 label DrillSergeantTalk:
-    $ movement_enabled = False
     DRI "What is it maggot"
     BEN "I was wondering if you could go over what I need to do one more time."
     DRI "I have a important meeting to get to and I will NOT be late"
@@ -149,14 +119,8 @@ label DrillSergeantTalk:
     DRI "Than you need to get yourself in proper uniform!"
     BEN "Oh i-."
     DRI "You better have got all of that maggot! I need to go."
-    $ game_state["chapter_1"]["projector_room"]["driwalkedaway"] = True
-    $ movement_enabled = True
-    scene walkaway1
     jump intreactivesection01
 label FrontSeat:
-    hide screen HUD
-    hide screen tutorial_screen
-    hide screen checkKey    
     window show     
     scene bootcampinsideprojectorroomstartm # Or appropriate scene
     "Although I much rather do this myself I have no other options, I walk up towards the front seat the man is small in stature the only defining trait about him I can notice is his turban."
@@ -201,11 +165,7 @@ label FrontSeat:
     jump OutsideAfterScrewdriverAdvice
 
 label BackSeat:
-    hide screen HUD
-    hide screen tutorial_screen
-    hide screen checkKey    
     window show    
-    $ move_to_pos(130,450)
     "I head towards the backseat, the person in the backseat seems to have something over there head, it looks like a paper bag."
     show bagman_default at right
     BAG "..."

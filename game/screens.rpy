@@ -347,7 +347,7 @@ screen main_menu():
     ## This ensures that any other menu screen is replaced.
     tag menu
 
-    add set_random_title_screen()
+    add gui.main_menu_background
 
 
 

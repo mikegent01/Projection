@@ -224,14 +224,7 @@ transform fit_screen:
 
 transform flip_horizontal:
     xzoom -1.0
-screen rajman():
-        add ("images/char/Drill Sarg/drill2.png") xpos 1086 ypos 400 xanchor 0.0 yanchor 0.0 zoom 4 at flip_horizontal
 
-screen samuel():
-    if not game_state["chapter_1"]["projector_room"]["viewed_tutorial"]:
-        add ("images/char/Samuel/samsit2.png") xpos 552 ypos 473 xanchor 0.0 yanchor 0.0 zoom 4
-screen drill_sargent():
-        add ("images/char/Drill Sarg/drill2.png") xpos 1086 ypos 400 xanchor 0.0 yanchor 0.0 zoom 4 at flip_horizontal
 image stage1:
     "images/bg/Starting_Room/stage1.png", 
     xysize (config.screen_width, config.screen_height)        
