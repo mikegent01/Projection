@@ -15,6 +15,11 @@ Bare-bones Ren'Py project: `game/script.rpy`, the default Ren'Py UI files (`opti
 4. Duplicate `default preferences.text_cps` (script.rpy:5 and options.rpy), duplicate `define MAR` in char.rpy.
 5. `_alt` duplicate labels (around lines 650-1000) are likely dead copies.
 6. `options.rpy` still says name "Reflection" and a `TheMerge-...` save directory.
-7. `game/audio/player` (about 378 MB of TTS voice files such as Debate Host and Meowbahh) is not referenced by the script. Left in place; delete if it belongs to another project.
+7. `game/audio/player` (unused TTS voice files referencing real people/memes) deleted. Unused meme Character defs (Baldi, Jesus, Meowbahh, Marc) removed from char.rpy.
 
 Run lint with: `D:\renpy\renpy-8.0.1-sdk\renpy.exe D:\wre\Projection-renpy-lean lint`
+
+## IP cleanup still to do (decision: original IP, no SCP/real references)
+- Rename "AAXA SCP-A01/A02", "this SCP" (script.rpy lines 156, 559, 615, 872, 928, 1082, 1099) once the organization name is chosen.
+- Review: DARPA (261), Nu-7 (1313, 1386), "the foundation"/dod (1092), Butts2012 (602, 915), K-pop earphones (392, 705).
+- Ending: the other-world material is not in this script (it ends at the osprey briefing); gut it in the Twine draft/bible only.

@@ -7,19 +7,14 @@ image side sam = "images/char/head/sam_head.png"
 #chara defines
 
 define BAG = Character("Bagman",color="#b66c12")
-define BAL = Character("Baldi")
 define BEN = Character("Benjamin", image = "ben")
 define BON = Character("Bonehead")
 define DAV = Character("David")
 define DEE = Character("Deerik")
 define DOM = Character("Domonic")
 define DRI = Character("Drill Sarg",color="#12a3b6", image = "sarg")
-define JES = Character("Jesus")
-define MAR = Character("Marc")
 default selected_item = None
-define MEO = Character("Meowbahh")
 define MIK = Character("Mike")
-define MAR = Character("Marc")
 define EMA = Character("Emma")
 define MYS = Character("Mystery Man")
 define PLA = Character("Placeholder")
