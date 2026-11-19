@@ -3,21 +3,266 @@ default test_room = 0
 default inventory = []
 default player_weapon_choice = None
 default preferences.text_cps = 30
+default endings = 0
+default lie = 0
+default truth = 0
+default saidsorry = False
+
+init python:
+    # How much people trust Ben: truths told minus lies told.
+    # A function, so it is worked out fresh every time it is used.
+    def trust():
+        return truth - lie
+
+label end01:
+    BEN "...."
+    # full image of ben walking away
+    return
+
 label start:
     #     $ quick_menu = False uncomment on deployment
     play music "audio/Music/Boot Camp/boot_camp.mp3" volume 0.5 
     scene stage1 with None
-    BEN "I can only feel excitement, as I finally go to sit down."
+    # chapter 0 
+    "Rot. Mold. Decay."
     scene satgescene9 with None
-    BEN "We are going on a real mission, no more training, no more drills. I finally can put my skills to good use."
-    BEN "I have accepted my fate long before I woke up this morning knowing what this job entailed"
-    BEN "and I intend to make this mission a success by myself."
+    BEN "I keep repeating these words to myself."
+    BEN "It reminds me of where I belong....."
+    BEN "I don't belong here..."
+    BEN "I never did..."
+    # water drop sound
+    # water on bens face
+    BEN "What the?"
+    #show ceiling water leaking
+    BEN "I'll kill you!"
+    # another drop
+    BEN "Whatever"
+    # splash splash up to door pants get wet
+    menu:
+        "Open The door":
+            jump continuedoor
+        "Don't":
+            jump end01
+label continuedoor:
     scene ani2_background with None
-    "I sit down on a wooden chair."
-    "people around me muttering and talking."
-    "The dampness from the old moldy brick walls."
+    "I need to push myself"
+    "The future is scary though."
+    "What if i just keep living this lie."
+    "Will everyone treat me the same?"
+    "Or will I lose everyone?"
+    #Turn door handle is in hand
+    BEN "..."
+    #knocking sound effect 
+    BEN "OPEN UP ITS THE ARMY!"
+    # foot steps
+    Q "That isn't who i think it is, is it?"
+    # peak through broken door hole
+    Q "Ben?"
+    Q2 "Did you say ben!?"
+    Q2 "HEY! BEN! HEY!!"
+    Q "*sigh*"
+    # door open revealing sam WHO IS Q2 and ed who is Q1
+    Q "BEN! Where were you all morning!"
+    Q "I waited all morning in the mess hall for you!"
+    Q "You better have a goode excuse for not showing up!"
+    Q "because I am going to kick your fucking ass!"
+    Q2 "Ben this is a perfect opportunity! Have you ever lied before?"
+    #ed punch sam (playful)
+    Q2 "oww"
+    BEN "..."
+    Q "...."
+    Q2 "It's real simple actually let me teach you!"
+    menu:
+        "Let him teach you":
+            jump lietutorial
+        "Stop this tomfoolery":
+            jump skiplietutorial
+    
+label lietutorial:
+    ED "I didn't ask for you to come over here and lecture me!"
+    Q2 "Lying is something that comes natrually to most people like ED over here!"
+    ED "Hey!"
+    Q2 "When you lie and get caught it can damage your credibility."
+    Q2 "The bigger the lie the more damage it will take."
+    BEN "Makes sense."
+    ED "Are we in kindergarden?"
+    Q2 "When you get low credibility you should probably not lie as much"
+    BEN "Why?"
+    Q2 "If you lie too much noone will trust you."
+    BEN "Maybe I should tell the truth more often than..."
+    ED "Can we get back to the topic at hand!!"
+    ED "You two are really the worst people are worked with."
+    ED "You are both losers, idiots, fools, pawns."
+    
+label skiplietutorial:
+    ED "ENOUGH OF THIS!"
+    SAM "Ed..."
+    ED "SHUT IT!"
+    ED "I put up with you two all week!"
+    ED "I really needed both of you to be here for me this morning!"
+    ED "I expected samuel not to show up but YOU. YOU!"
+    ED "I waited and waited for you ben...."
+    ED "Till the doors were closed!"
+    ED "You promissed both of you..."
+    SAM "We know its just that-"
+    ED "What were you too scared to come?"
+    SAM "Please...."
+    ED "It is kinda funny actually ben!"
+    ED "Seeing you stumble around, break the door handle."
+    menu:
+        "...":
+            jump insultcontinue
+        "I am sorry.":
+            jump sorrytoed
+label sorrytoed:
+        $ saidsorry = True
+        ED "I SAID SHUT IT"
+label insultcontinue:
+    ED "Seeing your uniform get soaked while you stand there like an idiot."
+    SAM "We are all scared here ed its not funny please!"
+    ED "You know what will be funny?"
+    ED "Seeing your uniform soaked in your own blood."
+    #approach ben
+    SAM "Stop!"
+    ED "Are you even listining or are you just going to stay quiet like always."
+    ED "Ben, were the hell were you all morning! NO lying got it!"
+
+label firsttruthoption:
+    menu:
+        "I had a panic attack":
+            jump panicattack
+        "I did show up you just weren't there":
+            jump showedup
+
+    
+    
+    label panicattack:
+        $ truth += 1
+        BEN "I......I......i...."
+        ED "I?"
+        BEN "I had a panic attack...."
+        SAM "Ben-"
+        BEN "I didn't want to wake up....."
+        BEN "So I stayed in bed till the quartermaster...."
+        ED "That's it?"
+        BEN "..!"
+        SAM "..."
+        ED "You break a promise and all you can say is that you had a panic attack?"
+        ED "You don't think I was worried."
+        SAM "We are all worreid!"
+        # Ben gets angry
+        ED "We?"
+        ED "Have you ever considered my feelings?"
+        SAM "Your feelings?"
+        ED "Guess not."
+        ED "Waiting in a cold damp room only gets you so far..."
+        # Approach ben grab his collar
+        ED "This world is a rotten place ben."
+        SAM "Don't -"
+        ED "AND YOUR THE MOST ROTTEN OF THEM ALL"
+        # full sprite of ben being held up by collar scowel on face 
+        SAM "Put him down!"
+        menu:
+            "Punch":
+                jump strugglebenheld
+            "Don't Punch":
+                jump benstruggle0
+label benstruggle0:
+        SAM "Think about how ben is feeling right now!"
+        ED "Is that all you care about?"
+        # Push ben down
+        ED "Actions speak louder than words ben!"
+        ED "No matter how much you lie or tell the truth"
+        ED "It won't change what happened this morning"
+        # Ed walks away ben on floor
+        if saidsorry == False:        
+            ED "I hope I am not put in the same squad with a loser as you."
+            # ed walks away
+        else:
+            # ed walks away
+            # sam runs over to ben soaked in water
+            SAM "Are you alright ben?"
+            BEN "Yeah... I will be fine."
+            SAM "We should give him some time to cool off..."
+            # full sprite samuel reaching hand out to ben soaked in water
+            SAM "I am happy you told the truth."
+            SAM "We might be able to fix this.....together"
+        jump projectorroomseat
+label strugglebenheld:
+    # screen flash sound effect
+    # cut to ed on the floor brusied eye
+    if saidsorry == False:
+        ED "Is this your idea of being sorry?"
+        ED "Guess I shouldn't have trusted you."
+        $ truth = max(0, truth - 1)
+        
+    else:
+        ED "You....."
+    #ed runs away
+    # sam looks defeated horrified face
+    SAM "..."
+    menu:
+        "Leave samuel alone":
+            jump projectorroomseat
+
+
+    label showedup:
+        $ lie += 1
+        BEN "I......I......i...."
+        ED "I?"
+        BEN "I did show up! You were the one that didn't show up!"
+        ED "Pffft"
+        SAM "Ben, maybe we need another lesson on lying."
+        ED "Your right, samuel! He does need another leasson in lying"
+        ED "Let me take it a bit more slower to get you up to speed."
+        # Approach ben smirking
+        ED "So wen youu wie you nweed to put in a widdle more effort."
+        ED "You nweed too come up wit a gwood wie."
+        ED "If you cawnt come up wit a gwood wie than downt wie."
+        BEN "Is this a joke to you?"
+        ED "You both are losers."
+        SAM "Dude."
+        ED "Braindead losers."
+        ED "I wasted my entire week hanging out with you two."
+        SAM "You don't mean that..."
+        ED "I don't?" # smile
+        #walk to samuel 
+        ED "Since when do you get to tell me how to feel?"
+        #reach for samuel 
+        #slap sound effect
+        # sam looks pissed 
+        SAM "HANDS OFF!"
+        ED "If I knew you would fight back, I would have played dirty"
+        #Kick water onto bens pants
+        BEN "Hey!"
+        if saidsorry == True:
+            ED "I will let you and piss boy figure out what you did wrong."
+            ED "Come back when you are ready to apologize."
+        BEN "I did not piss myself!"
+        # ed leaves
+        SAM "I.....I need to cool off"
+        if saidsorry == True:
+            SAM "After that we both should apologize...."
+            SAM "He was really hurt by us not showing up I can tell."
+            SAM "That doesn't mean he should have acted the way he did..."
+            SAM "Listen ben the truth may hurt but.....try not to lie"
+        # walks off
+        "Did lying get me off the hook?"
+        jump projectorroomseat
+
+label projectorroomseat:
+    # black screen fade 
+    # nothing else just ben white background 
+    "My head is spinning"
+    "I am all wet now...."
+    "Let me take my uniform off"
+    # clothes take off sound effect show him white undershirt
+    "Whatever happens I will continue moving forward."
+    
+
     scene drillsargpickup with None
-    "And the sweat of the soldiers who just got back from training."
+    "Well at least I can finally sit down."
+    
     scene 0drillsargpickupstart with None
     "Almost distracts me from the fact that I forgot to put on my uniform this morning."
     "The soldiers all sit in rows of chairs, laid out in a linear sequence, ridged but not sturdy."

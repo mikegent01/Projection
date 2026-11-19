@@ -11,6 +11,7 @@ define BEN = Character("Benjamin", image = "ben")
 define BON = Character("Bonehead")
 define DAV = Character("David")
 define DEE = Character("Deerik")
+define ED = Character("Eddy")
 define DOM = Character("Domonic")
 define DRI = Character("Drill Sarg",color="#12a3b6", image = "sarg")
 default selected_item = None
